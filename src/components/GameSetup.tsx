@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Play, Rabbit } from 'lucide-react';
-import {
-  DEFAULT_PLAYER_PLACEHOLDERS,
-  INITIAL_PLAYER_NAMES,
-} from '@/constants/constants';
+import { Play, Rabbit, Plus, Minus } from 'lucide-react';
 import { getPlayerColor } from '@/constants/theme';
 
 interface GameSetupProps {
@@ -13,7 +9,8 @@ interface GameSetupProps {
 }
 
 export const GameSetup = ({ onGameStart }: GameSetupProps) => {
-  const [playerNames, setPlayerNames] = useState(INITIAL_PLAYER_NAMES);
+  const [playerCount, setPlayerCount] = useState(4);
+  const [playerNames, setPlayerNames] = useState(['', '', '', '']);
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -21,15 +18,38 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
     setPlayerNames(newNames);
   };
 
+  const handlePlayerCountChange = (newCount: number) => {
+    if (newCount >= 3 && newCount <= 8) {
+      setPlayerCount(newCount);
+
+      // 플레이어 수에 맞게 이름 배열 조정
+      const newNames = [...playerNames];
+      if (newCount > playerNames.length) {
+        // 플레이어 수가 늘어나면 빈 문자열 추가
+        while (newNames.length < newCount) {
+          newNames.push('');
+        }
+      } else {
+        // 플레이어 수가 줄어들면 배열 자르기
+        newNames.splice(newCount);
+      }
+      setPlayerNames(newNames);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const players = playerNames.map((name, index) =>
-      name.trim() === '' ? DEFAULT_PLAYER_PLACEHOLDERS[index] : name.trim()
-    );
+    const players = playerNames
+      .slice(0, playerCount)
+      .map((name, index) =>
+        name.trim() === '' ? `플레이어 ${index + 1}` : name.trim()
+      );
 
     onGameStart(players);
   };
+
+  const getDefaultPlayerName = (index: number) => `플레이어 ${index + 1}`;
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white border-1 border-gray-600">
@@ -38,24 +58,59 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="text-sm font-medium text-gray-700 mb-2 block">
-          Player Names
-        </label>
-        {playerNames.map((name, index) => (
-          <div
-            key={DEFAULT_PLAYER_PLACEHOLDERS[index]}
-            className="flex justify-between items-center gap-3"
-          >
-            <Rabbit size={30} color={getPlayerColor(index)} strokeWidth={1.5} />
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => handleNameChange(index, e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder={DEFAULT_PLAYER_PLACEHOLDERS[index]}
-            />
+        {/* 플레이어 수 조절 */}
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium text-gray-700">Players</label>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => handlePlayerCountChange(playerCount - 1)}
+              disabled={playerCount <= 3}
+              className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <Minus size={16} />
+            </button>
+            <span className="w-8 text-center font-medium text-gray-800">
+              {playerCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => handlePlayerCountChange(playerCount + 1)}
+              disabled={playerCount >= 8}
+              className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <Plus size={16} />
+            </button>
           </div>
-        ))}
+        </div>
+
+        {/* 플레이어 이름 입력 */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-2 block">
+            Player Names
+          </label>
+          <div className="space-y-3">
+            {playerNames.slice(0, playerCount).map((name, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center gap-3"
+              >
+                <Rabbit
+                  size={30}
+                  color={getPlayerColor(index)}
+                  strokeWidth={1.5}
+                />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => handleNameChange(index, e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  placeholder={getDefaultPlayerName(index)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
 
         <button
           type="submit"

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
@@ -26,9 +26,6 @@ export const metadata: Metadata = {
   title: 'Dixit Scoreboard',
   description: 'Dixit 게임 점수판 앱 - 친구들과 함께 Dixit을 즐겨보세요',
   manifest: '/manifest.json',
-  themeColor: '#F3F4F6',
-  viewport:
-    'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -44,6 +41,14 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' }],
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#F3F4F6',
 };
 
 export default function RootLayout({
