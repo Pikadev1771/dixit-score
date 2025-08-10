@@ -3,6 +3,11 @@
 import { Player, PlayerId } from '@/types/types';
 import { Trophy, Award, Rabbit } from 'lucide-react';
 import { getPlayerColor } from '@/constants/theme';
+import {
+  getFirstPlacePlayers,
+  getPlayerRank,
+  isPlayerInFirstPlace,
+} from '@/lib/dixit';
 
 interface ScoreboardProps {
   players: Player[];
@@ -34,25 +39,19 @@ export const Scoreboard = ({
     return `${winnerNames}님이\n공동 승리했습니다!`;
   };
 
-  const getPlayerRowStyle = (index: number, playerId: PlayerId) => {
+  const getPlayerRowStyle = (playerId: PlayerId) => {
     if (isGameEnded && winnerIds.includes(playerId)) {
       return 'bg-green-50 border-green-200';
     }
 
     if (
       currentRound === 1 ||
-      sortedPlayers.every(
-        (player) => player.totalScore === sortedPlayers[0].totalScore
-      )
+      getFirstPlacePlayers(players).length === players.length
     ) {
       return 'bg-gray-50 border-gray-200';
     }
 
-    const firstPlaceScore = sortedPlayers[0].totalScore;
-    if (
-      playerId === sortedPlayers[index].id &&
-      sortedPlayers[index].totalScore === firstPlaceScore
-    ) {
+    if (isPlayerInFirstPlace(playerId, players)) {
       return 'bg-yellow-50 border-yellow-200';
     }
 
@@ -83,15 +82,15 @@ export const Scoreboard = ({
       )}
 
       <div className="space-y-3">
-        {sortedPlayers.map((player, index) => {
+        {sortedPlayers.map((player) => {
           const playerIndex = players.findIndex((p) => p.id === player.id);
           const playerColor = getPlayerColor(playerIndex);
+          const rank = getPlayerRank(player.id, players);
 
           return (
             <div
               key={player.id}
               className={`flex justify-between items-center p-3 border-1 ${getPlayerRowStyle(
-                index,
                 player.id
               )}`}
             >
@@ -100,7 +99,7 @@ export const Scoreboard = ({
                   className="w-6 h-6 flex items-center justify-center text-sm font-bold text-white"
                   style={{ backgroundColor: playerColor }}
                 >
-                  {index + 1}
+                  {rank}
                 </span>
                 <span className="font-medium text-gray-800 flex items-center gap-2">
                   <Rabbit size={30} color={playerColor} strokeWidth={1.5} />
