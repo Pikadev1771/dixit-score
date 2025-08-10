@@ -7,6 +7,7 @@ import { Scoreboard } from '@/components/Scoreboard';
 
 import { useGameStore } from '@/lib/store';
 import { RoundScoreForm } from '@/types/types';
+import { RoundForm } from '@/components/RoundForm';
 
 const Home = () => {
   const [isGameSetup, setIsGameSetup] = useState(true);
@@ -70,6 +71,13 @@ const Home = () => {
             isGameEnded={isGameEnded}
             winnerIds={winnerIds}
           />
+          {!isGameEnded && (
+            <RoundForm
+              players={players}
+              currentRound={rounds.length + 1}
+              onSubmit={handleRoundSubmit}
+            />
+          )}
         </div>
       </div>
     </div>
