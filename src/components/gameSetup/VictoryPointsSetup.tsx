@@ -18,7 +18,6 @@ export const VictoryPointsSetup = ({
       onChange={onVictoryPointsChange}
       min={3}
       max={100}
-      placeholder="30"
     />
   );
 };
