@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: 'Dixit Scoreboard',
   description: 'Dixit 게임 점수판 앱 - 친구들과 함께 Dixit을 즐겨보세요',
   manifest: '/manifest.json',
-  themeColor: '#3b82f6',
+  themeColor: '#F3F4F6',
   viewport:
     'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
   appleWebApp: {
