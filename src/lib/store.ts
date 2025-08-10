@@ -23,7 +23,7 @@ const useGameStore = create<GameStore>((set, get) => ({
   initializeGame: (playerNames: string[]) => {
     const players: Player[] = playerNames.map((name, index) => ({
       id: `player-${index + 1}`,
-      name,
+      name: name.trim() || `플레이어 ${index + 1}`,
       totalScore: 0,
     }));
 
