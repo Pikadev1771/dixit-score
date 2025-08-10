@@ -3,16 +3,19 @@
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { GameSetup } from '@/components/GameSetup';
+import { useGameStore } from '@/lib/store';
 
 const Home = () => {
   const [isGameSetup, setIsGameSetup] = useState(true);
+  const { initializeGame, resetGame } = useGameStore();
 
   const handleGameStart = (playerNames: string[]) => {
-    console.log('playerNames', playerNames);
+    initializeGame(playerNames);
     setIsGameSetup(false);
   };
 
   const handleResetGame = () => {
+    resetGame();
     setIsGameSetup(true);
   };
 
@@ -44,6 +47,8 @@ const Home = () => {
             NEW GAME
           </button>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">점수표</div>
       </div>
     </div>
   );
