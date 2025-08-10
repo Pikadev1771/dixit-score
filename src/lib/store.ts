@@ -38,13 +38,10 @@ const useGameStore = create<GameStore>((set, get) => ({
   finishRound: (form: RoundScoreForm) => {
     const { players } = get();
 
-    // 직접 입력된 점수 사용
-    const currentRoundScores = form.directScores;
-
     // 플레이어 총점 업데이트
     const updatedPlayers = players.map((player) => ({
       ...player,
-      totalScore: player.totalScore + (currentRoundScores[player.id] || 0),
+      totalScore: player.totalScore + (form.directScores[player.id] || 0),
     }));
 
     // 현재 라운드 정보 생성
@@ -52,7 +49,7 @@ const useGameStore = create<GameStore>((set, get) => ({
       id: `round-${Date.now()}`,
       roundNumber: get().rounds.length + 1,
       form,
-      scores: currentRoundScores,
+      scores: form.directScores,
       timestamp: new Date().toISOString(),
     };
 

@@ -3,15 +3,30 @@
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { GameSetup } from '@/components/GameSetup';
+import { Scoreboard } from '@/components/Scoreboard';
+
 import { useGameStore } from '@/lib/store';
+import { RoundScoreForm } from '@/types/types';
 
 const Home = () => {
   const [isGameSetup, setIsGameSetup] = useState(true);
-  const { initializeGame, resetGame } = useGameStore();
+  const {
+    players,
+    rounds,
+    isGameEnded,
+    winnerIds,
+    initializeGame,
+    finishRound,
+    resetGame,
+  } = useGameStore();
 
   const handleGameStart = (playerNames: string[]) => {
     initializeGame(playerNames);
     setIsGameSetup(false);
+  };
+
+  const handleRoundSubmit = (form: RoundScoreForm) => {
+    finishRound(form);
   };
 
   const handleResetGame = () => {
@@ -48,7 +63,14 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">점수표</div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Scoreboard
+            players={players}
+            currentRound={rounds.length + 1}
+            isGameEnded={isGameEnded}
+            winnerIds={winnerIds}
+          />
+        </div>
       </div>
     </div>
   );
