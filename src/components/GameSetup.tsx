@@ -3,14 +3,23 @@
 import { useState } from 'react';
 import { Play, Rabbit, Plus, Minus } from 'lucide-react';
 import { getPlayerColor } from '@/constants/theme';
+import { ScoreConfig } from '@/types/types';
 import {
   INITIAL_PLAYER_COUNT,
   INITIAL_PLAYER_NAMES,
   INITIAL_VICTORY_TOTAL_POINTS,
+  INITIAL_STORYTELLER_ALL_OR_NONE_GUESSED_POINTS,
+  INITIAL_STORYTELLER_NORMAL_POINTS,
+  INITIAL_CORRECT_GUESS_POINTS,
+  INITIAL_RECEIVED_VOTE_POINTS,
 } from '@/constants/constants';
 
 interface GameSetupProps {
-  onGameStart: (playerNames: string[], victoryPoints: number) => void;
+  onGameStart: (
+    playerNames: string[],
+    victoryPoints: number,
+    scoreConfig: ScoreConfig
+  ) => void;
 }
 
 export const GameSetup = ({ onGameStart }: GameSetupProps) => {
@@ -19,6 +28,13 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
   const [victoryPoints, setVictoryPoints] = useState(
     INITIAL_VICTORY_TOTAL_POINTS
   );
+  const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
+    storytellerAllOrNoneGuessedPoints:
+      INITIAL_STORYTELLER_ALL_OR_NONE_GUESSED_POINTS,
+    storytellerNormalPoints: INITIAL_STORYTELLER_NORMAL_POINTS,
+    correctGuessPoints: INITIAL_CORRECT_GUESS_POINTS,
+    receivedVotePoints: INITIAL_RECEIVED_VOTE_POINTS,
+  });
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -41,7 +57,7 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGameStart(playerNames, victoryPoints);
+    onGameStart(playerNames, victoryPoints, scoreConfig);
   };
 
   return (
@@ -114,9 +130,98 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
             max={100}
             value={victoryPoints}
             onChange={(e) => setVictoryPoints(parseInt(e.target.value) || 0)}
-            className="w-24 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+            className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
             placeholder="30"
           />
+        </div>
+
+        <div className="border-t border-gray-300 my-4" />
+
+        {/* 점수 설정 */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-700">
+              Score Config
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-small text-gray-700 whitespace-pre-line">
+              {`Storyteller\n(All/None Guessed)`}
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={20}
+              value={scoreConfig.storytellerAllOrNoneGuessedPoints}
+              onChange={(e) =>
+                setScoreConfig({
+                  ...scoreConfig,
+                  storytellerAllOrNoneGuessedPoints:
+                    parseInt(e.target.value) || 0,
+                })
+              }
+              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+              placeholder="0"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-small text-gray-700 whitespace-pre-line">
+              {`Storyteller\n(Normal)`}
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={20}
+              value={scoreConfig.storytellerNormalPoints}
+              onChange={(e) =>
+                setScoreConfig({
+                  ...scoreConfig,
+                  storytellerNormalPoints: parseInt(e.target.value) || 0,
+                })
+              }
+              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+              placeholder="3"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-gray-700">Correct Guess</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={20}
+              value={scoreConfig.correctGuessPoints}
+              onChange={(e) =>
+                setScoreConfig({
+                  ...scoreConfig,
+                  correctGuessPoints: parseInt(e.target.value) || 0,
+                })
+              }
+              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+              placeholder="3"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-gray-700">Received Vote</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={20}
+              value={scoreConfig.receivedVotePoints}
+              onChange={(e) =>
+                setScoreConfig({
+                  ...scoreConfig,
+                  receivedVotePoints: parseInt(e.target.value) || 0,
+                })
+              }
+              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+              placeholder="1"
+            />
+          </div>
         </div>
 
         <button
