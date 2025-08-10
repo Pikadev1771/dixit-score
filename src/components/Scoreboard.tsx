@@ -38,9 +38,24 @@ export const Scoreboard = ({
     if (isGameEnded && winnerIds.includes(playerId)) {
       return 'bg-green-50 border-green-200';
     }
-    if (index === 0 && !isGameEnded) {
+
+    if (
+      currentRound === 1 ||
+      sortedPlayers.every(
+        (player) => player.totalScore === sortedPlayers[0].totalScore
+      )
+    ) {
+      return 'bg-gray-50 border-gray-200';
+    }
+
+    const firstPlaceScore = sortedPlayers[0].totalScore;
+    if (
+      playerId === sortedPlayers[index].id &&
+      sortedPlayers[index].totalScore === firstPlaceScore
+    ) {
       return 'bg-yellow-50 border-yellow-200';
     }
+
     return 'bg-gray-50 border-gray-200';
   };
 

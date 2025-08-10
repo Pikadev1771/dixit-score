@@ -89,7 +89,7 @@ describe('Scoreboard 컴포넌트', () => {
     expect(screen.getByText('Scoreboard')).toBeInTheDocument();
 
     // 플레이어 점수순 정렬
-    const playerNames = screen.getAllByText(/Alice|Bob|Charlie/);
+    const playerNames = screen.getAllByText(/Alice|Bob|Charlie|David/);
     expect(playerNames[0]).toHaveTextContent('Bob'); // 1위
     expect(playerNames[1]).toHaveTextContent('Alice'); // 2위
     expect(playerNames[2]).toHaveTextContent('Charlie'); // 3위
