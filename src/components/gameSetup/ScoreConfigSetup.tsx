@@ -29,10 +29,6 @@ export const ScoreConfigSetup = ({
             storytellerAllOrNoneGuessedPoints: value,
           })
         }
-        min={0}
-        max={20}
-        placeholder="0"
-        className="text-sm font-small text-gray-700 whitespace-pre-line"
       />
 
       <NumberInput
@@ -44,10 +40,6 @@ export const ScoreConfigSetup = ({
             storytellerNormalPoints: value,
           })
         }
-        min={0}
-        max={20}
-        placeholder="3"
-        className="text-sm font-small text-gray-700 whitespace-pre-line"
       />
 
       <NumberInput
@@ -59,9 +51,6 @@ export const ScoreConfigSetup = ({
             correctGuessPoints: value,
           })
         }
-        min={0}
-        max={20}
-        placeholder="3"
       />
 
       <NumberInput
@@ -73,9 +62,6 @@ export const ScoreConfigSetup = ({
             receivedVotePoints: value,
           })
         }
-        min={0}
-        max={20}
-        placeholder="1"
       />
     </div>
   );
