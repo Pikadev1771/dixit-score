@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Home from '@/app/page';
+import { Scoreboard } from '@/components/Scoreboard';
 
 // 컴포넌트 테스트
 // Next.js의 useRouter 모킹
@@ -63,5 +64,50 @@ describe('Home 컴포넌트', () => {
     await waitFor(() => {
       expect(screen.getByText('Game Setup')).toBeInTheDocument();
     });
+  });
+});
+
+describe('Scoreboard 컴포넌트', () => {
+  const mockPlayers = [
+    { id: 'player-1', name: 'Alice', totalScore: 10 },
+    { id: 'player-2', name: 'Bob', totalScore: 15 },
+    { id: 'player-3', name: 'Charlie', totalScore: 5 },
+    { id: 'player-4', name: 'David', totalScore: 3 },
+  ];
+
+  it('플레이어들이 점수순으로 정렬되어 표시되어야 한다', () => {
+    render(
+      <Scoreboard
+        players={mockPlayers}
+        currentRound={1}
+        isGameEnded={false}
+        winnerIds={[]}
+      />
+    );
+
+    // Scoreboard 제목 표시
+    expect(screen.getByText('Scoreboard')).toBeInTheDocument();
+
+    // 플레이어 점수순 정렬
+    const playerNames = screen.getAllByText(/Alice|Bob|Charlie/);
+    expect(playerNames[0]).toHaveTextContent('Bob'); // 1위
+    expect(playerNames[1]).toHaveTextContent('Alice'); // 2위
+    expect(playerNames[2]).toHaveTextContent('Charlie'); // 3위
+    expect(playerNames[3]).toHaveTextContent('David'); // 4위
+  });
+
+  it('게임이 종료되면 승리자가 표시되어야 한다', () => {
+    render(
+      <Scoreboard
+        players={mockPlayers}
+        currentRound={1}
+        isGameEnded={true}
+        winnerIds={['player-2']} // Bob이 승리자
+      />
+    );
+
+    // 승리 메시지 표시
+    expect(screen.getByText(/Bob님이/)).toBeInTheDocument();
+    expect(screen.getByText(/승리했습니다!/)).toBeInTheDocument();
   });
 });
