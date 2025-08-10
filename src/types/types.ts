@@ -32,4 +32,5 @@ export interface GameState {
   scoreConfig: ScoreConfig;
   isGameEnded: boolean;
   winnerIds: PlayerId[];
+  victoryPoints: number;
 }

@@ -22,8 +22,8 @@ const Home = () => {
     resetGame,
   } = useGameStore();
 
-  const handleGameStart = (playerNames: string[]) => {
-    initializeGame(playerNames);
+  const handleGameStart = (playerNames: string[], victoryPoints: number) => {
+    initializeGame(playerNames, victoryPoints);
     setIsGameSetup(false);
   };
 

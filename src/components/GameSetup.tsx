@@ -6,15 +6,19 @@ import { getPlayerColor } from '@/constants/theme';
 import {
   INITIAL_PLAYER_COUNT,
   INITIAL_PLAYER_NAMES,
+  INITIAL_VICTORY_TOTAL_POINTS,
 } from '@/constants/constants';
 
 interface GameSetupProps {
-  onGameStart: (playerNames: string[]) => void;
+  onGameStart: (playerNames: string[], victoryPoints: number) => void;
 }
 
 export const GameSetup = ({ onGameStart }: GameSetupProps) => {
   const [playerCount, setPlayerCount] = useState(INITIAL_PLAYER_COUNT);
   const [playerNames, setPlayerNames] = useState(INITIAL_PLAYER_NAMES);
+  const [victoryPoints, setVictoryPoints] = useState(
+    INITIAL_VICTORY_TOTAL_POINTS
+  );
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -37,7 +41,7 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGameStart(playerNames);
+    onGameStart(playerNames, victoryPoints);
   };
 
   return (
@@ -94,6 +98,25 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
               />
             </div>
           ))}
+        </div>
+
+        <div className="border-t border-gray-300 my-4" />
+
+        {/* 승리 점수 설정 */}
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium text-gray-700">
+            Victory Points
+          </label>
+          <input
+            type="number"
+            inputMode="numeric"
+            min={3}
+            max={100}
+            value={victoryPoints}
+            onChange={(e) => setVictoryPoints(parseInt(e.target.value) || 0)}
+            className="w-24 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
+            placeholder="30"
+          />
         </div>
 
         <button
