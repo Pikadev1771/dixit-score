@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { GameSetup } from '@/components/GameSetup';
+import { GameSetup } from '@/components/gameSetup/GameSetup';
 import { Scoreboard } from '@/components/Scoreboard';
 
 import { useGameStore } from '@/lib/store';

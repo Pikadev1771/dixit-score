@@ -13,6 +13,7 @@ import {
   INITIAL_CORRECT_GUESS_POINTS,
   INITIAL_RECEIVED_VOTE_POINTS,
 } from '@/constants/constants';
+import { NumberInput } from './NumberInput';
 
 interface GameSetupProps {
   onGameStart: (
@@ -119,21 +120,14 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
         <div className="border-t border-gray-300 my-4" />
 
         {/* 승리 점수 설정 */}
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700">
-            Victory Points
-          </label>
-          <input
-            type="number"
-            inputMode="numeric"
-            min={3}
-            max={100}
-            value={victoryPoints}
-            onChange={(e) => setVictoryPoints(parseInt(e.target.value) || 0)}
-            className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
-            placeholder="30"
-          />
-        </div>
+        <NumberInput
+          label="Victory Points"
+          value={victoryPoints}
+          onChange={setVictoryPoints}
+          min={3}
+          max={100}
+          placeholder="30"
+        />
 
         <div className="border-t border-gray-300 my-4" />
 
@@ -145,83 +139,63 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
             </label>
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-small text-gray-700 whitespace-pre-line">
-              {`Storyteller\n(All/None Guessed)`}
-            </label>
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={20}
-              value={scoreConfig.storytellerAllOrNoneGuessedPoints}
-              onChange={(e) =>
-                setScoreConfig({
-                  ...scoreConfig,
-                  storytellerAllOrNoneGuessedPoints:
-                    parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
-              placeholder="0"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-small text-gray-700 whitespace-pre-line">
-              {`Storyteller\n(Normal)`}
-            </label>
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={20}
-              value={scoreConfig.storytellerNormalPoints}
-              onChange={(e) =>
-                setScoreConfig({
-                  ...scoreConfig,
-                  storytellerNormalPoints: parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
-              placeholder="3"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-gray-700">Correct Guess</label>
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={20}
-              value={scoreConfig.correctGuessPoints}
-              onChange={(e) =>
-                setScoreConfig({
-                  ...scoreConfig,
-                  correctGuessPoints: parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
-              placeholder="3"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-gray-700">Received Vote</label>
-            <input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={20}
-              value={scoreConfig.receivedVotePoints}
-              onChange={(e) =>
-                setScoreConfig({
-                  ...scoreConfig,
-                  receivedVotePoints: parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-20 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
-              placeholder="1"
-            />
-          </div>
+          <NumberInput
+            label={`Storyteller\n(All/None Guessed)`}
+            value={scoreConfig.storytellerAllOrNoneGuessedPoints}
+            onChange={(value) =>
+              setScoreConfig({
+                ...scoreConfig,
+                storytellerAllOrNoneGuessedPoints: value,
+              })
+            }
+            min={0}
+            max={20}
+            placeholder="0"
+            className="text-sm font-small text-gray-700 whitespace-pre-line"
+          />
+
+          <NumberInput
+            label={`Storyteller\n(Normal)`}
+            value={scoreConfig.storytellerNormalPoints}
+            onChange={(value) =>
+              setScoreConfig({
+                ...scoreConfig,
+                storytellerNormalPoints: value,
+              })
+            }
+            min={0}
+            max={20}
+            placeholder="3"
+            className="text-sm font-small text-gray-700 whitespace-pre-line"
+          />
+
+          <NumberInput
+            label="Correct Guess"
+            value={scoreConfig.correctGuessPoints}
+            onChange={(value) =>
+              setScoreConfig({
+                ...scoreConfig,
+                correctGuessPoints: value,
+              })
+            }
+            min={0}
+            max={20}
+            placeholder="3"
+          />
+
+          <NumberInput
+            label="Received Vote"
+            value={scoreConfig.receivedVotePoints}
+            onChange={(value) =>
+              setScoreConfig({
+                ...scoreConfig,
+                receivedVotePoints: value,
+              })
+            }
+            min={0}
+            max={20}
+            placeholder="1"
+          />
         </div>
 
         <button
