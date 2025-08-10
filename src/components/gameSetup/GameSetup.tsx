@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Play, Rabbit, Plus, Minus } from 'lucide-react';
-import { getPlayerColor } from '@/constants/theme';
+import { Play } from 'lucide-react';
 import { ScoreConfig } from '@/types/types';
 import {
   INITIAL_PLAYER_COUNT,
@@ -13,7 +12,9 @@ import {
   INITIAL_CORRECT_GUESS_POINTS,
   INITIAL_RECEIVED_VOTE_POINTS,
 } from '@/constants/constants';
-import { NumberInput } from './NumberInput';
+import { PlayerSetup } from './PlayerSetup';
+import { VictoryPointsSetup } from './VictoryPointsSetup';
+import { ScoreConfigSetup } from './ScoreConfigSetup';
 
 interface GameSetupProps {
   onGameStart: (
@@ -68,135 +69,26 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* 플레이어 수 조절 */}
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700">Players</label>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handlePlayerCountChange('minus')}
-              disabled={playerCount <= 3}
-              className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <Minus size={16} />
-            </button>
-            <span className="w-8 text-center font-medium text-gray-800">
-              {playerCount}
-            </span>
-            <button
-              type="button"
-              onClick={handlePlayerCountChange('plus')}
-              disabled={playerCount >= 8}
-              className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <Plus size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* 플레이어 이름 입력 */}
-        <div className="space-y-3">
-          {playerNames.map((name, index) => (
-            <div
-              key={`player-${index}`}
-              className="flex justify-between items-center gap-3"
-            >
-              <Rabbit
-                size={30}
-                color={getPlayerColor(index)}
-                strokeWidth={1.5}
-              />
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => handleNameChange(index, e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder={`플레이어 ${index + 1}`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t border-gray-300 my-4" />
-
-        {/* 승리 점수 설정 */}
-        <NumberInput
-          label="Victory Points"
-          value={victoryPoints}
-          onChange={setVictoryPoints}
-          min={3}
-          max={100}
-          placeholder="30"
+        <PlayerSetup
+          playerCount={playerCount}
+          playerNames={playerNames}
+          onPlayerCountChange={handlePlayerCountChange}
+          onNameChange={handleNameChange}
         />
 
         <div className="border-t border-gray-300 my-4" />
 
-        {/* 점수 설정 */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-gray-700">
-              Score Config
-            </label>
-          </div>
+        <VictoryPointsSetup
+          victoryPoints={victoryPoints}
+          onVictoryPointsChange={setVictoryPoints}
+        />
 
-          <NumberInput
-            label={`Storyteller\n(All/None Guessed)`}
-            value={scoreConfig.storytellerAllOrNoneGuessedPoints}
-            onChange={(value) =>
-              setScoreConfig({
-                ...scoreConfig,
-                storytellerAllOrNoneGuessedPoints: value,
-              })
-            }
-            min={0}
-            max={20}
-            placeholder="0"
-            className="text-sm font-small text-gray-700 whitespace-pre-line"
-          />
+        <div className="border-t border-gray-300 my-4" />
 
-          <NumberInput
-            label={`Storyteller\n(Normal)`}
-            value={scoreConfig.storytellerNormalPoints}
-            onChange={(value) =>
-              setScoreConfig({
-                ...scoreConfig,
-                storytellerNormalPoints: value,
-              })
-            }
-            min={0}
-            max={20}
-            placeholder="3"
-            className="text-sm font-small text-gray-700 whitespace-pre-line"
-          />
-
-          <NumberInput
-            label="Correct Guess"
-            value={scoreConfig.correctGuessPoints}
-            onChange={(value) =>
-              setScoreConfig({
-                ...scoreConfig,
-                correctGuessPoints: value,
-              })
-            }
-            min={0}
-            max={20}
-            placeholder="3"
-          />
-
-          <NumberInput
-            label="Received Vote"
-            value={scoreConfig.receivedVotePoints}
-            onChange={(value) =>
-              setScoreConfig({
-                ...scoreConfig,
-                receivedVotePoints: value,
-              })
-            }
-            min={0}
-            max={20}
-            placeholder="1"
-          />
-        </div>
+        <ScoreConfigSetup
+          scoreConfig={scoreConfig}
+          onScoreConfigChange={setScoreConfig}
+        />
 
         <button
           type="submit"

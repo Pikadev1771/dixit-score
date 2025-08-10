@@ -1,0 +1,71 @@
+'use client';
+
+import { Rabbit, Plus, Minus } from 'lucide-react';
+import { getPlayerColor } from '@/constants/theme';
+import {
+  INITIAL_PLAYER_COUNT,
+  INITIAL_PLAYER_NAMES,
+} from '@/constants/constants';
+
+interface PlayerSetupProps {
+  playerCount: number;
+  playerNames: string[];
+  onPlayerCountChange: (type: 'plus' | 'minus') => void;
+  onNameChange: (index: number, name: string) => void;
+}
+
+export const PlayerSetup = ({
+  playerCount,
+  playerNames,
+  onPlayerCountChange,
+  onNameChange,
+}: PlayerSetupProps) => {
+  return (
+    <div className="space-y-4">
+      {/* 플레이어 수 조절 */}
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-gray-700">Players</label>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => onPlayerCountChange('minus')}
+            disabled={playerCount <= 3}
+            className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <Minus size={16} />
+          </button>
+          <span className="w-8 text-center font-medium text-gray-800">
+            {playerCount}
+          </span>
+          <button
+            type="button"
+            onClick={() => onPlayerCountChange('plus')}
+            disabled={playerCount >= 8}
+            className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <Plus size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* 플레이어 이름 입력 */}
+      <div className="space-y-3">
+        {playerNames.map((name, index) => (
+          <div
+            key={`player-${index}`}
+            className="flex justify-between items-center gap-3"
+          >
+            <Rabbit size={30} color={getPlayerColor(index)} strokeWidth={1.5} />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => onNameChange(index, e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder={`플레이어 ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
