@@ -24,11 +24,11 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const Players = playerNames.map((name, index) =>
+    const players = playerNames.map((name, index) =>
       name.trim() === '' ? DEFAULT_PLAYER_PLACEHOLDERS[index] : name.trim()
     );
 
-    onGameStart(Players);
+    onGameStart(players);
   };
 
   return (
