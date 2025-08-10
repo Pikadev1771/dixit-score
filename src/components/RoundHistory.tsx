@@ -3,7 +3,7 @@
 import { Round, Player } from '@/types/types';
 import { History, Target, Clock, Mic, Rabbit } from 'lucide-react';
 import { getPlayerColor } from '@/constants/theme';
-
+import { formatTimestamp } from '@/lib/utils';
 import {
   Accordion,
   AccordionContent,
@@ -56,7 +56,7 @@ export const RoundHistory = ({ rounds, players }: RoundHistoryProps) => {
                   </div>
                   <span className="flex-1 text-sm text-gray-500 flex items-center gap-1">
                     <Clock size={16} strokeWidth={1.5} />
-                    {round.timestamp}
+                    {formatTimestamp(round.timestamp)}
                   </span>
                 </div>
               </AccordionTrigger>
