@@ -8,6 +8,7 @@ import { Scoreboard } from '@/components/Scoreboard';
 import { useGameStore } from '@/lib/store';
 import { RoundScoreForm } from '@/types/types';
 import { RoundForm } from '@/components/RoundForm';
+import { RoundHistory } from '@/components/RoundHistory';
 
 const Home = () => {
   const [isGameSetup, setIsGameSetup] = useState(true);
@@ -79,6 +80,7 @@ const Home = () => {
             />
           )}
         </div>
+        <RoundHistory rounds={rounds} players={players} />
       </div>
     </div>
   );
