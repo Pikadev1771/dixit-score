@@ -77,7 +77,7 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
         <div className="space-y-3">
           {playerNames.map((name, index) => (
             <div
-              key={`player-${index}-${name}`}
+              key={`player-${index}`}
               className="flex justify-between items-center gap-3"
             >
               <Rabbit

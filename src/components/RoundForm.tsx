@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { PLAYER_COUNT } from '@/constants/constants';
+
 import { getMaxScorePerRound } from '@/lib/dixit';
 
 interface RoundFormProps {
@@ -128,7 +128,7 @@ export const RoundForm = ({
                     type="number"
                     inputMode="numeric"
                     min={0}
-                    max={getMaxScorePerRound(PLAYER_COUNT)}
+                    max={getMaxScorePerRound(players.length)}
                     value={directScores[player.id] || ''}
                     onChange={(e) =>
                       handleDirectScoreChange(

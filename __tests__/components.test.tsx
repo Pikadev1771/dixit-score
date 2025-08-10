@@ -20,7 +20,7 @@ describe('Home 컴포넌트', () => {
     render(<Home />);
 
     expect(screen.getByText('Game Setup')).toBeInTheDocument();
-    expect(screen.getByText('Player Names')).toBeInTheDocument();
+    expect(screen.getByText('Players')).toBeInTheDocument();
     expect(screen.getByText('START')).toBeInTheDocument();
   });
 
