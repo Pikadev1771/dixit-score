@@ -127,6 +127,8 @@ export const RoundForm = ({
                   <input
                     type="number"
                     inputMode="numeric"
+                    min={0}
+                    max={getMaxScorePerRound(PLAYER_COUNT)}
                     value={directScores[player.id] || ''}
                     onChange={(e) =>
                       handleDirectScoreChange(
