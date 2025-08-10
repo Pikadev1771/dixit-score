@@ -42,7 +42,10 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
           Player Names
         </label>
         {playerNames.map((name, index) => (
-          <div key={index} className="flex justify-between items-center gap-3">
+          <div
+            key={DEFAULT_PLAYER_PLACEHOLDERS[index]}
+            className="flex justify-between items-center gap-3"
+          >
             <Rabbit size={30} color={getPlayerColor(index)} strokeWidth={1.5} />
             <input
               type="text"

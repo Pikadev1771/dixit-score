@@ -1,10 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import { GameSetup } from '@/components/GameSetup';
 
-export default function Home() {
-  const handleGameStart = (playerNames: string[]) => {
-    console.log('playerNames', playerNames);
+const Home = () => {
+  const [isGameSetup, setIsGameSetup] = useState(true);
+
+  console.log('isGameSetup', isGameSetup);
+  const handleGameStart = () => {
+    console.log('start');
+    setIsGameSetup(false);
   };
 
   return (
@@ -17,4 +22,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;
