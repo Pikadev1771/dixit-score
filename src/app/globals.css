@@ -5,8 +5,7 @@
 
 @theme {
   --font-sans: var(--font-pretendard), system-ui, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, 'SF Mono', Monaco, Consolas,
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
   --font-pretendard: var(--font-pretendard), system-ui, sans-serif;
   --font-montserrat: var(--font-montserrat), system-ui, sans-serif;
