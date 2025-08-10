@@ -2,15 +2,11 @@
 
 import { Rabbit, Plus, Minus } from 'lucide-react';
 import { getPlayerColor } from '@/constants/theme';
-import {
-  INITIAL_PLAYER_COUNT,
-  INITIAL_PLAYER_NAMES,
-} from '@/constants/constants';
 
 interface PlayerSetupProps {
   playerCount: number;
   playerNames: string[];
-  onPlayerCountChange: (type: 'plus' | 'minus') => void;
+  onPlayerCountChange: (type: 'plus' | 'minus') => () => void;
   onNameChange: (index: number, name: string) => void;
 }
 
@@ -28,9 +24,9 @@ export const PlayerSetup = ({
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => onPlayerCountChange('minus')}
+            onClick={onPlayerCountChange('minus')}
             disabled={playerCount <= 3}
-            className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2.5 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Minus size={16} />
           </button>
@@ -39,9 +35,9 @@ export const PlayerSetup = ({
           </span>
           <button
             type="button"
-            onClick={() => onPlayerCountChange('plus')}
+            onClick={onPlayerCountChange('plus')}
             disabled={playerCount >= 8}
-            className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2.5 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Plus size={16} />
           </button>
