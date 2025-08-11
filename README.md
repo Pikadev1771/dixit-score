@@ -4,6 +4,8 @@
 <img width="203" height="443" alt="스크린샷 2025-08-11 오후 9 55 48" src="https://github.com/user-attachments/assets/871eba91-5a67-452c-a4e2-009369b95ef9" />
 <img width="206" height="446" alt="스크린샷 2025-08-11 오후 9 54 57" src="https://github.com/user-attachments/assets/5d326346-2134-4616-bec7-240d122da1ce" />
 
+<h4>배포 주소: <a href="https://dixit-score.vercel.app
+/">https://dixit-score.vercel.app/</a></h4>
 
 ## 📋 프로젝트 개요
 
@@ -18,8 +20,9 @@ Dixit 보드게임의 점수 계산과 게임 진행을 관리하는 웹 애플�
 - Testing: Jest + React Testing Library
 - Package Manager: pnpm
 - Linting: ESLint
-- PWA: next-pwa + Service Worker
+- PWA: next-pwa
 
+  
 ### 프로젝트 구조
 
 ```
