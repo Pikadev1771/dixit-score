@@ -15,7 +15,7 @@ export const calculateStorytellerScore = (
   if (!storytellerCardId) return 0;
 
   const correctGuessCount = votes.filter(
-    (vote) => vote.votedCardOwnerId === storytellerCardId
+    (vote) => vote.votedCardId === storytellerCardId
   ).length;
 
   if (correctGuessCount === 0 || correctGuessCount === totalVoters) {
@@ -48,7 +48,7 @@ export const calculateCorrectGuessScore = (
   if (playerId !== storytellerId && storytellerCardId) {
     const hasCorrectGuess = votes.some(
       (vote) =>
-        vote.voterId === playerId && vote.votedCardOwnerId === storytellerCardId
+        vote.voterId === playerId && vote.votedCardId === storytellerCardId
     );
     return hasCorrectGuess ? scoreConfig.correctGuessPoints : 0;
   }
@@ -76,7 +76,7 @@ export const calculateReceivedVoteScore = (
 
   // 해당 플레이어가 받은 투표 수
   const receivedVotes = votes.filter(
-    (vote) => vote.votedCardOwnerId === playerCardId
+    (vote) => vote.votedCardId === playerCardId
   ).length;
 
   return receivedVotes * scoreConfig.receivedVotePoints;

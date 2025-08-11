@@ -220,7 +220,7 @@ describe('VoteRoundForm', () => {
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
         storytellerId: '1',
-        directScores: expect.objectContaining({
+        scores: expect.objectContaining({
           '1': expect.any(Number),
           '2': expect.any(Number),
           '3': expect.any(Number),
@@ -277,7 +277,7 @@ describe('VoteRoundForm', () => {
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
         storytellerId: '1',
-        directScores: expect.objectContaining({
+        scores: expect.objectContaining({
           '1': expect.any(Number), // Alice (스토리텔러)
           '2': expect.any(Number), // Bob
           '3': expect.any(Number), // Charlie
@@ -287,8 +287,8 @@ describe('VoteRoundForm', () => {
 
     const submittedData = mockOnSubmit.mock.calls[0][0];
     expect(submittedData.storytellerId).toBe('1');
-    expect(typeof submittedData.directScores['1']).toBe('number');
-    expect(typeof submittedData.directScores['2']).toBe('number');
-    expect(typeof submittedData.directScores['3']).toBe('number');
+    expect(typeof submittedData.scores['1']).toBe('number');
+    expect(typeof submittedData.scores['2']).toBe('number');
+    expect(typeof submittedData.scores['3']).toBe('number');
   });
 });

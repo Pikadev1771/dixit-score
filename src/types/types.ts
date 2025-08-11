@@ -15,20 +15,21 @@ export interface ScoreConfig {
 
 export interface Vote {
   voterId: PlayerId;
-  votedCardOwnerId: PlayerId;
+  votedCardId: PlayerId;
 }
 
-export interface RoundScoreForm {
+export interface RoundForm {
   storytellerId: PlayerId;
-  directScores: Record<PlayerId, number>;
+  scores: Record<PlayerId, number>;
   votes?: Vote[];
 }
 
 export interface Round {
   id: string;
   roundNumber: number;
-  form: RoundScoreForm;
+  storytellerId: PlayerId;
   scores: Record<PlayerId, number>;
+  votes?: Vote[];
   timestamp: string;
 }
 
@@ -43,3 +44,9 @@ export interface GameState {
   victoryPoints: number;
   mode: Mode;
 }
+
+export type VoteStep =
+  | 'storyteller'
+  | 'voting'
+  | 'storytellerCard'
+  | 'playerCardReveal';

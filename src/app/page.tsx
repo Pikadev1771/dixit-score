@@ -5,7 +5,7 @@ import { RotateCcw } from 'lucide-react';
 import { GameSetup } from '@/components/game-setup';
 import { Scoreboard } from '@/components/Scoreboard';
 import { useGameStore } from '@/lib/store';
-import { RoundScoreForm, ScoreConfig, Mode } from '@/types/types';
+import { RoundForm as RoundFormType, ScoreConfig, Mode } from '@/types/types';
 import { RoundHistory } from '@/components/RoundHistory';
 import { RoundForm } from '@/components/round-form';
 
@@ -21,6 +21,8 @@ const Home = () => {
     resetGame,
   } = useGameStore();
 
+  console.log('rounds', rounds);
+
   const handleGameStart = (
     playerNames: string[],
     victoryPoints: number,
@@ -31,7 +33,7 @@ const Home = () => {
     setIsGameSetup(false);
   };
 
-  const handleRoundSubmit = (form: RoundScoreForm) => {
+  const handleRoundSubmit = (form: RoundFormType) => {
     finishRound(form);
   };
 

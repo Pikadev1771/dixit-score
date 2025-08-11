@@ -66,10 +66,7 @@ export const RoundHistory = ({ rounds, players }: RoundHistoryProps) => {
                     <Mic size={16} strokeWidth={1.5} />
                     Storyteller:{' '}
                     <span className="text-orange-600">
-                      {
-                        players.find((p) => p.id === round.form.storytellerId)
-                          ?.name
-                      }
+                      {players.find((p) => p.id === round.storytellerId)?.name}
                     </span>
                   </p>
                   <div className="mt-2 space-y-1">

@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { Dices, Check } from 'lucide-react';
 import {
   Player,
-  RoundScoreForm as RoundScoreFormType,
+  RoundForm as RoundFormType,
   PlayerId,
   Vote as VoteType,
+  VoteStep,
 } from '@/types/types';
 
 import { StorytellerSelector } from './StorytellerSelector';
@@ -21,7 +22,7 @@ import { calculatePlayerScores } from '@/lib/score-calculator';
 interface VoteRoundFormProps {
   players: Player[];
   currentRound: number;
-  onSubmit: (form: RoundScoreFormType) => void;
+  onSubmit: (form: RoundFormType) => void;
 }
 
 export const VoteRoundForm = ({
@@ -31,32 +32,35 @@ export const VoteRoundForm = ({
 }: VoteRoundFormProps) => {
   const { scoreConfig } = useGameStore();
   const [storytellerId, setStorytellerId] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState<
-    'storyteller' | 'voting' | 'storytellerCard' | 'playerCardReveal'
-  >('storyteller');
-  const [votes, setVotes] = useState<VoteType[]>([]);
+  const [currentStep, setCurrentStep] = useState<VoteStep>('storyteller');
+  const [votes, setVotes] = useState<VoteType[]>([]); // 투표 정보 (임시 votedCardId)
+
+  // 현재 투표하는 플레이어 인덱스
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
+
   const [storytellerCardId, setStorytellerCardId] = useState<string>('');
   const [revealedCards, setRevealedCards] = useState<PlayerId[]>([]);
   const [currentRevealerIndex, setCurrentRevealerIndex] = useState(0);
   const [cardOwners, setCardOwners] = useState<Record<PlayerId, PlayerId>>({});
 
-  // 스토리텔러를 제외한 플레이어들
+  // 스토리텔러 제외 플레이어들
   const nonStorytellerPlayers = players.filter(
     (player) => player.id !== storytellerId
   );
 
+  // 1. 스토리텔러 선택
   const handleStorytellerSelect = (value: string) => {
     setStorytellerId(value);
     setCurrentStep('voting');
   };
 
-  const handleCardVote = (cardOwnerId: PlayerId) => {
+  // 2. 카드 투표
+  const handleCardVote = (cardId: PlayerId) => {
     const currentVoter = nonStorytellerPlayers[currentVoterIndex];
 
     const newVote: VoteType = {
       voterId: currentVoter.id,
-      votedCardOwnerId: cardOwnerId,
+      votedCardId: cardId,
     };
 
     setVotes((prev) => [...prev, newVote]);
@@ -69,39 +73,36 @@ export const VoteRoundForm = ({
     }
   };
 
-  const handleStorytellerCardSelect = (cardOwnerId: PlayerId) => {
-    setStorytellerCardId(cardOwnerId);
+  const handleStorytellerCardSelect = (cardId: PlayerId) => {
+    setStorytellerCardId(cardId);
     setCurrentStep('playerCardReveal');
   };
 
-  const handleCardClick = (cardOwnerId: PlayerId) => {
+  const handleCardClick = (cardId: PlayerId) => {
     if (currentStep === 'voting') {
-      handleCardVote(cardOwnerId);
+      handleCardVote(cardId);
     } else if (currentStep === 'storytellerCard') {
-      handleStorytellerCardSelect(cardOwnerId);
+      handleStorytellerCardSelect(cardId);
     } else if (currentStep === 'playerCardReveal') {
       // 이미 공개된 카드나 스토리텔러 카드는 선택할 수 없음
-      if (
-        storytellerCardId === cardOwnerId ||
-        revealedCards.includes(cardOwnerId)
-      ) {
+      if (storytellerCardId === cardId || revealedCards.includes(cardId)) {
         return;
       }
-      handlePlayerCardReveal(cardOwnerId);
+      handlePlayerCardReveal(cardId);
     }
   };
 
-  const handlePlayerCardReveal = (cardOwnerId: PlayerId) => {
+  const handlePlayerCardReveal = (cardId: PlayerId) => {
     // 현재 공개할 플레이어가 선택한 카드를 해당 플레이어의 카드로 설정
     const currentRevealer = nonStorytellerPlayers[currentRevealerIndex];
 
     // 카드 소유자 정보 업데이트
     setCardOwners((prev) => ({
       ...prev,
-      [cardOwnerId]: currentRevealer.id,
+      [cardId]: currentRevealer.id,
     }));
 
-    setRevealedCards((prev) => [...prev, cardOwnerId]);
+    setRevealedCards((prev) => [...prev, cardId]);
 
     // 마지막에서 2번째 플레이어인 경우, 마지막 플레이어도 자동으로 남은 카드 선택
     if (currentRevealerIndex === nonStorytellerPlayers.length - 2) {
@@ -110,7 +111,7 @@ export const VoteRoundForm = ({
         (player) =>
           player.id !== storytellerCardId &&
           !revealedCards.includes(player.id) &&
-          player.id !== cardOwnerId
+          player.id !== cardId
       );
 
       if (remainingCard) {
@@ -133,7 +134,7 @@ export const VoteRoundForm = ({
 
   const handleRoundComplete = () => {
     // 공통 점수 계산 로직 사용
-    const directScores: Record<PlayerId, number> = {};
+    const scores: Record<PlayerId, number> = {};
 
     players.forEach((player) => {
       const { correctGuessScore, receivedVoteScore } = calculatePlayerScores(
@@ -146,12 +147,12 @@ export const VoteRoundForm = ({
         scoreConfig
       );
 
-      directScores[player.id] = correctGuessScore + receivedVoteScore;
+      scores[player.id] = correctGuessScore + receivedVoteScore;
     });
 
     onSubmit({
       storytellerId,
-      directScores,
+      scores,
     });
 
     // 상태 초기화

@@ -29,6 +29,8 @@ export const CardList = ({
   currentRevealerIndex = 0,
   cardOwners = {},
 }: CardListProps) => {
+  console.log('players', players);
+  console.log('votes', votes);
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
       {players.map((player, index) => (
@@ -80,7 +82,7 @@ export const CardList = ({
           {votes.length > 0 && (
             <div className="text-xs text-gray-500 mt-1 text-center">
               {votes
-                .filter((vote) => vote.votedCardOwnerId === player.id)
+                .filter((vote) => vote.votedCardId === player.id)
                 .map((vote) => {
                   const voter = players.find((p) => p.id === vote.voterId);
                   return (

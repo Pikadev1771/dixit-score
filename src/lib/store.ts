@@ -3,7 +3,7 @@ import {
   GameState,
   Player,
   Round,
-  RoundScoreForm,
+  RoundForm,
   ScoreConfig,
   Mode,
 } from '@/types/types';
@@ -21,7 +21,7 @@ interface GameStore extends GameState {
     scoreConfig?: ScoreConfig,
     mode?: Mode
   ) => void;
-  finishRound: (form: RoundScoreForm) => void;
+  finishRound: (form: RoundForm) => void;
   resetGame: () => void;
 }
 
@@ -57,21 +57,20 @@ const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  finishRound: (form: RoundScoreForm) => {
+  finishRound: (form: RoundForm) => {
     const { players } = get();
 
     // 플레이어 총점 업데이트
     const updatedPlayers = players.map((player) => ({
       ...player,
-      totalScore: player.totalScore + (form.directScores[player.id] || 0),
+      totalScore: player.totalScore + (form.scores[player.id] || 0),
     }));
 
     // 현재 라운드 정보 생성
     const currentRound: Round = {
+      ...form,
       id: `round-${Date.now()}`,
       roundNumber: get().rounds.length + 1,
-      form,
-      scores: form.directScores,
       timestamp: new Date().toISOString(),
     };
 
