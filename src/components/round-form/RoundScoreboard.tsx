@@ -2,6 +2,7 @@
 
 import { Player, PlayerId, Vote as VoteType, ScoreConfig } from '@/types/types';
 import { Calculator, Mic } from 'lucide-react';
+import { calculatePlayerScores } from '@/lib/score-calculator';
 
 interface RoundScoreboardProps {
   players: Player[];
@@ -22,48 +23,16 @@ export const RoundScoreboard = ({
   cardOwners,
   scoreConfig,
 }: RoundScoreboardProps) => {
-  const calculatePlayerScores = (player: Player) => {
-    let correctGuessScore = 0;
-    let receivedVoteScore = 0;
-
-    // 스토리텔러인 경우
-    if (player.id === storytellerId && storytellerCardId) {
-      const correctGuessCount = votes.filter(
-        (vote) => vote.votedCardOwnerId === storytellerCardId
-      ).length;
-      const totalVoters = players.length - 1; // 스토리텔러 제외
-
-      if (correctGuessCount === 0 || correctGuessCount === totalVoters) {
-        correctGuessScore += scoreConfig.storytellerAllOrNoneGuessedPoints;
-      } else {
-        correctGuessScore += scoreConfig.storytellerNormalPoints;
-      }
-    }
-
-    // 정답을 맞춘 경우 (스토리텔러가 아닌 플레이어)
-    if (player.id !== storytellerId && storytellerCardId) {
-      const hasCorrectGuess = votes.some(
-        (vote) =>
-          vote.voterId === player.id &&
-          vote.votedCardOwnerId === storytellerCardId
-      );
-      if (hasCorrectGuess) {
-        correctGuessScore += scoreConfig.correctGuessPoints;
-      }
-    }
-
-    // 받은 투표 점수 (카드 공개된 플레이어만)
-    const playerCardId = Object.keys(cardOwners).find(
-      (cardId) => cardOwners[cardId] === player.id
+  const getPlayerScores = (player: Player) => {
+    return calculatePlayerScores(
+      player,
+      votes,
+      storytellerId,
+      storytellerCardId,
+      cardOwners,
+      revealedCards,
+      scoreConfig
     );
-    if (playerCardId && revealedCards.includes(playerCardId)) {
-      const receivedVotes = votes.filter(
-        (vote) => vote.votedCardOwnerId === playerCardId
-      ).length;
-      receivedVoteScore += receivedVotes * scoreConfig.receivedVotePoints;
-    }
-
-    return { correctGuessScore, receivedVoteScore };
   };
 
   return (
@@ -75,7 +44,7 @@ export const RoundScoreboard = ({
       <div className="grid grid-cols-1 gap-1">
         {players.map((player) => {
           const { correctGuessScore, receivedVoteScore } =
-            calculatePlayerScores(player);
+            getPlayerScores(player);
           const isStoryteller = player.id === storytellerId;
 
           return (

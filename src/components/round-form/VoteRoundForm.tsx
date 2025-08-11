@@ -16,6 +16,7 @@ import { StorytellerCardStep } from './StorytellerCardStep';
 import { PlayerCardRevealStep } from './PlayerCardRevealStep';
 import { RoundScoreboard } from './RoundScoreboard';
 import { useGameStore } from '@/lib/store';
+import { calculatePlayerScores } from '@/lib/score-calculator';
 
 interface VoteRoundFormProps {
   players: Player[];
@@ -131,50 +132,21 @@ export const VoteRoundForm = ({
   };
 
   const handleRoundComplete = () => {
-    // Vote 모드에서 계산된 점수를 Score 모드 형식으로 변환
+    // 공통 점수 계산 로직 사용
     const directScores: Record<PlayerId, number> = {};
 
     players.forEach((player) => {
-      let score = 0;
-
-      // 스토리텔러인 경우
-      if (player.id === storytellerId && storytellerCardId) {
-        const correctGuessCount = votes.filter(
-          (vote) => vote.votedCardOwnerId === storytellerCardId
-        ).length;
-        const totalVoters = players.length - 1; // 스토리텔러 제외
-
-        if (correctGuessCount === 0 || correctGuessCount === totalVoters) {
-          score += scoreConfig.storytellerAllOrNoneGuessedPoints;
-        } else {
-          score += scoreConfig.storytellerNormalPoints;
-        }
-      }
-
-      // 정답을 맞춘 경우 (스토리텔러가 아닌 플레이어)
-      if (player.id !== storytellerId && storytellerCardId) {
-        const hasCorrectGuess = votes.some(
-          (vote) =>
-            vote.voterId === player.id &&
-            vote.votedCardOwnerId === storytellerCardId
-        );
-        if (hasCorrectGuess) {
-          score += scoreConfig.correctGuessPoints;
-        }
-      }
-
-      // 받은 투표 점수 (카드가 공개된 플레이어만)
-      const playerCardId = Object.keys(cardOwners).find(
-        (cardId) => cardOwners[cardId] === player.id
+      const { correctGuessScore, receivedVoteScore } = calculatePlayerScores(
+        player,
+        votes,
+        storytellerId,
+        storytellerCardId,
+        cardOwners,
+        revealedCards,
+        scoreConfig
       );
-      if (playerCardId && revealedCards.includes(playerCardId)) {
-        const receivedVotes = votes.filter(
-          (vote) => vote.votedCardOwnerId === playerCardId
-        ).length;
-        score += receivedVotes * scoreConfig.receivedVotePoints;
-      }
 
-      directScores[player.id] = score;
+      directScores[player.id] = correctGuessScore + receivedVoteScore;
     });
 
     onSubmit({
