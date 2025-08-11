@@ -2,40 +2,33 @@
 
 import { useState } from 'react';
 import { Mic, Check, Rabbit, Dices, Calculator } from 'lucide-react';
-import {
-  Player,
-  RoundScoreForm as RoundScoreFormType,
-  PlayerId,
-} from '@/types/types';
+import { Player, RoundForm as RoundFormType, PlayerId } from '@/types/types';
 import { getPlayerColor } from '@/constants/theme';
+import { getMaxScorePerRound } from '@/lib/dixit';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
-import { PLAYER_COUNT } from '@/constants/constants';
-import { getMaxScorePerRound } from '@/lib/dixit';
+} from '../ui/select';
 
-interface RoundFormProps {
+interface ScoreRoundFormProps {
   players: Player[];
   currentRound: number;
-  onSubmit: (form: RoundScoreFormType) => void;
+  onSubmit: (form: RoundFormType) => void;
 }
 
-export const RoundForm = ({
+export const ScoreRoundForm = ({
   players,
   currentRound,
   onSubmit,
-}: RoundFormProps) => {
+}: ScoreRoundFormProps) => {
   const [storytellerId, setStorytellerId] = useState<string>('');
-  const [directScores, setDirectScores] = useState<Record<PlayerId, number>>(
-    {}
-  );
+  const [scores, setScores] = useState<Record<PlayerId, number>>({});
 
-  const handleDirectScoreChange = (playerId: PlayerId, score: number) => {
-    setDirectScores((prev) => ({
+  const handleScoreChange = (playerId: PlayerId, score: number) => {
+    setScores((prev) => ({
       ...prev,
       [playerId]: score,
     }));
@@ -46,27 +39,27 @@ export const RoundForm = ({
 
     const completeScores: Record<PlayerId, number> = {};
     players.forEach((player) => {
-      completeScores[player.id] = directScores[player.id] || 0;
+      completeScores[player.id] = scores[player.id] || 0;
     });
 
     onSubmit({
       storytellerId,
-      directScores: completeScores,
+      scores: completeScores,
     });
     setStorytellerId('');
-    setDirectScores({});
+    setScores({});
   };
 
   const getTotalScore = () => {
     return players.reduce((total, player) => {
-      const score = directScores[player.id] || 0;
+      const score = scores[player.id] || 0;
       return total + score;
     }, 0);
   };
 
   const isDisabled =
     !storytellerId ||
-    Object.values(directScores).some((score) => isNaN(score)) ||
+    Object.values(scores).some((score) => isNaN(score)) ||
     getTotalScore() === 0;
 
   return (
@@ -128,10 +121,10 @@ export const RoundForm = ({
                     type="number"
                     inputMode="numeric"
                     min={0}
-                    max={getMaxScorePerRound(PLAYER_COUNT)}
-                    value={directScores[player.id] || ''}
+                    max={getMaxScorePerRound(players.length)}
+                    value={scores[player.id] || ''}
                     onChange={(e) =>
-                      handleDirectScoreChange(
+                      handleScoreChange(
                         player.id,
                         parseInt(e.target.value) || 0
                       )

@@ -13,18 +13,27 @@ export interface ScoreConfig {
   receivedVotePoints: number;
 }
 
-export interface RoundScoreForm {
+export interface Vote {
+  voterId: PlayerId;
+  votedTargetId: PlayerId;
+}
+
+export interface RoundForm {
   storytellerId: PlayerId;
-  directScores: Record<PlayerId, number>;
+  scores: Record<PlayerId, number>;
+  votes?: Vote[];
 }
 
 export interface Round {
   id: string;
   roundNumber: number;
-  form: RoundScoreForm;
+  storytellerId: PlayerId;
   scores: Record<PlayerId, number>;
+  votes?: Vote[];
   timestamp: string;
 }
+
+export type Mode = 'VOTE' | 'SCORE';
 
 export interface GameState {
   players: Player[];
@@ -32,4 +41,12 @@ export interface GameState {
   scoreConfig: ScoreConfig;
   isGameEnded: boolean;
   winnerIds: PlayerId[];
+  victoryPoints: number;
+  mode: Mode;
 }
+
+export type VoteStep =
+  | 'storyteller'
+  | 'voting'
+  | 'storytellerCard'
+  | 'playerCardReveal';
