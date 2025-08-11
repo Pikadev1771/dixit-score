@@ -1,4 +1,9 @@
-# Dixit Score
+<h1><a href="https://dixit-score.vercel.app
+/">Dixit Score</a></h1>
+
+<img width="203" height="443" alt="스크린샷 2025-08-11 오후 9 55 48" src="https://github.com/user-attachments/assets/871eba91-5a67-452c-a4e2-009369b95ef9" />
+<img width="206" height="446" alt="스크린샷 2025-08-11 오후 9 54 57" src="https://github.com/user-attachments/assets/5d326346-2134-4616-bec7-240d122da1ce" />
+
 
 ## 📋 프로젝트 개요
 
