@@ -27,11 +27,8 @@ export const StorytellerCardStep = ({
     <>
       <div className="mb-4">
         <h3 className="text-md font-medium text-gray-800 mb-2">
-          스토리텔러 카드 공개
+          Storyteller Card Reveal
         </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          스토리텔러는 정답 카드를 공개해 주세요
-        </p>
       </div>
 
       <CardList

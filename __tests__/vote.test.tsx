@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { VoteRoundForm } from '../src/components/round-form/VoteRoundForm';
 import { useGameStore } from '../src/lib/store';
 
-// Mock the store
 jest.mock('../src/lib/store', () => ({
   useGameStore: jest.fn(),
 }));

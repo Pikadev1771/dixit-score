@@ -1,8 +1,7 @@
 'use client';
 
 import { Player, PlayerId, Vote as VoteType, ScoreConfig } from '@/types/types';
-import { useGameStore } from '@/lib/store';
-import { Mic } from 'lucide-react';
+import { Calculator, Mic } from 'lucide-react';
 
 interface RoundScoreboardProps {
   players: Player[];
@@ -12,7 +11,6 @@ interface RoundScoreboardProps {
   revealedCards: PlayerId[];
   cardOwners: Record<PlayerId, PlayerId>;
   scoreConfig: ScoreConfig;
-  isMini?: boolean;
 }
 
 export const RoundScoreboard = ({
@@ -23,7 +21,6 @@ export const RoundScoreboard = ({
   revealedCards,
   cardOwners,
   scoreConfig,
-  isMini = false,
 }: RoundScoreboardProps) => {
   const calculatePlayerScores = (player: Player) => {
     let correctGuessScore = 0;
@@ -71,6 +68,10 @@ export const RoundScoreboard = ({
 
   return (
     <div className="mt-4 p-3 bg-gray-50 rounded-lg border">
+      <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <Calculator size={16} strokeWidth={1.5} />
+        Score
+      </label>
       <div className="grid grid-cols-1 gap-1">
         {players.map((player) => {
           const { correctGuessScore, receivedVoteScore } =

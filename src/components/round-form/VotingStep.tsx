@@ -30,11 +30,10 @@ export const VotingStep = ({
 
   return (
     <>
-      <div className="mb-4">
-        <h3 className="text-md font-medium text-gray-800 mb-2">카드 투표</h3>
-        <p className="text-sm text-gray-600 mb-4">
-          <span className="font-bold">{currentVoter?.name}</span> 님이 투표할
-          차례입니다.
+      <div className="mb-4 text-gray-800">
+        <h3 className="text-md font-medium mb-2">Voting</h3>
+        <p className="text-sm mb-4">
+          <span className="font-bold">{currentVoter?.name}</span> is voting.
         </p>
       </div>
 

@@ -35,15 +35,6 @@ export const CardList = ({
         <button
           key={player.id}
           onClick={() => {
-            console.log('Card clicked', {
-              playerId: player.id,
-              playerName: player.name,
-              currentStep,
-              storytellerCardId,
-              revealedCards,
-              currentRevealerIndex,
-              currentRevealer: nonStorytellerPlayers?.[currentRevealerIndex],
-            });
             onCardClick(player.id);
           }}
           disabled={

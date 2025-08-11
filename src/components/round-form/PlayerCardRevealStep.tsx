@@ -38,13 +38,13 @@ export const PlayerCardRevealStep = ({
       {!isAllCardsRevealed && (
         <div className="mb-4">
           <h3 className="text-md font-medium text-gray-800 mb-2">
-            플레이어 카드 공개
+            Player Card Reveal
           </h3>
           <p className="text-sm text-gray-600 mb-2">
             <span className="font-bold">
               {nonStorytellerPlayers[currentRevealerIndex]?.name}
             </span>{' '}
-            님이 자신의 카드를 공개할 차례입니다.
+            is revealing the card.
           </p>
         </div>
       )}

@@ -71,7 +71,7 @@ export const ScoreRoundForm = ({
   return (
     <div className="bg-white border-1 border-gray-600 p-6">
       <h2 className="font-light text-lg text-gray-800 mb-4 flex items-center gap-2">
-        <Dices size={20} strokeWidth={1.5} /> Round {currentRound} (Score Mode)
+        <Dices size={20} strokeWidth={1.5} /> Round {currentRound}
       </h2>
 
       <form onSubmit={handleRoundSubmit} className="space-y-4">

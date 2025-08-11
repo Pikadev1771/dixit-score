@@ -91,24 +91,8 @@ export const VoteRoundForm = ({
   };
 
   const handlePlayerCardReveal = (cardOwnerId: PlayerId) => {
-    console.log('handlePlayerCardReveal', {
-      cardOwnerId,
-      currentRevealerIndex,
-      currentRevealer: nonStorytellerPlayers[currentRevealerIndex],
-      nonStorytellerPlayers: nonStorytellerPlayers.map((p) => ({
-        id: p.id,
-        name: p.name,
-      })),
-    });
-
     // 현재 공개할 플레이어가 선택한 카드를 해당 플레이어의 카드로 설정
     const currentRevealer = nonStorytellerPlayers[currentRevealerIndex];
-
-    console.log('Setting card owner', {
-      cardOwnerId,
-      currentRevealerId: currentRevealer.id,
-      currentRevealerName: currentRevealer.name,
-    });
 
     // 카드 소유자 정보 업데이트
     setCardOwners((prev) => ({
@@ -216,7 +200,7 @@ export const VoteRoundForm = ({
   return (
     <div className="bg-white border-1 border-gray-600 p-6">
       <h2 className="font-light text-lg text-gray-800 mb-4 flex items-center gap-2">
-        <Dices size={20} strokeWidth={1.5} /> Round {currentRound} (Vote Mode)
+        <Dices size={20} strokeWidth={1.5} /> Round {currentRound}
       </h2>
 
       <div className="space-y-4">
