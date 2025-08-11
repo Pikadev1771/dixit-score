@@ -227,9 +227,3 @@ pnpm build
 - ✅ 플레이어 수 설정
 - ✅ 조건별 득점 점수 및 승리 조건 점수 설정
 - ✅ 모바일 최적화 UI/UX
-- ✅ PWA (Progressive Web App) 구현
-- ✅ Service Worker를 통한 오프라인 지원
-- ✅ 홈 화면 설치 기능
-- ✅ 앱 아이콘 및 스플래시 스크린
-- ✅ 반응형 디자인 (모바일/데스크톱)
-- ✅ Lighthouse 90+ 점수 달성
