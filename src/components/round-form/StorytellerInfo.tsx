@@ -1,22 +1,16 @@
 'use client';
 
 import { Mic } from 'lucide-react';
-import { Player, Vote as VoteType } from '@/types/types';
+import { Player } from '@/types/types';
 
 interface StorytellerInfoProps {
   players: Player[];
   storytellerId: string;
-  storytellerCardId: string;
-  votes: VoteType[];
-  nonStorytellerPlayers: Player[];
 }
 
 export const StorytellerInfo = ({
   players,
   storytellerId,
-  storytellerCardId,
-  votes,
-  nonStorytellerPlayers,
 }: StorytellerInfoProps) => {
   return (
     <div className="flex justify-center items-center gap-2 px-3 py-1 bg-orange-100 text-orange-600 text-sm font-medium rounded-full w-fit mx-auto text-center mb-3">

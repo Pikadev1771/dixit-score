@@ -214,13 +214,7 @@ export const VoteRoundForm = ({
         )}
 
         {currentStep !== 'storyteller' && (
-          <StorytellerInfo
-            players={players}
-            storytellerId={storytellerId}
-            storytellerCardId={storytellerCardId}
-            votes={votes}
-            nonStorytellerPlayers={nonStorytellerPlayers}
-          />
+          <StorytellerInfo players={players} storytellerId={storytellerId} />
         )}
 
         {/* 카드 투표 STEP */}

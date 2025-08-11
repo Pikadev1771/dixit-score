@@ -55,7 +55,8 @@ describe('VoteRoundForm', () => {
 
     // 투표 단계로 진행되었는지 확인
     await waitFor(() => {
-      expect(screen.getByText('카드 투표')).toBeInTheDocument();
+      expect(screen.getByText('Voting')).toBeInTheDocument();
+      expect(screen.getByText('is voting.')).toBeInTheDocument();
     });
   });
 
@@ -89,7 +90,7 @@ describe('VoteRoundForm', () => {
 
     // 스토리텔러 카드 선택 단계로 진행되었는지 확인
     await waitFor(() => {
-      expect(screen.getByText('스토리텔러 카드 공개')).toBeInTheDocument();
+      expect(screen.getByText('Storyteller Card Reveal')).toBeInTheDocument();
     });
   });
 
@@ -127,7 +128,8 @@ describe('VoteRoundForm', () => {
 
     // 플레이어 카드 공개 단계로 진행되었는지 확인
     await waitFor(() => {
-      expect(screen.getByText('플레이어 카드 공개')).toBeInTheDocument();
+      expect(screen.getByText('Player Card Reveal')).toBeInTheDocument();
+      expect(screen.getByText('is revealing the card.')).toBeInTheDocument();
     });
   });
 

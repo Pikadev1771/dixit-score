@@ -1,8 +1,7 @@
 'use client';
 
-import { Player, PlayerId, Vote as VoteType, ScoreConfig } from '@/types/types';
+import { Player, PlayerId, Vote as VoteType } from '@/types/types';
 import { CardList } from './CardList';
-import { RoundScoreboard } from './RoundScoreboard';
 
 interface StorytellerCardStepProps {
   players: Player[];
@@ -38,8 +37,6 @@ export const StorytellerCardStep = ({
         currentStep={currentStep}
         onCardClick={onCardClick}
       />
-
-      {storytellerCardId && <div>다음 단계</div>}
     </>
   );
 };
