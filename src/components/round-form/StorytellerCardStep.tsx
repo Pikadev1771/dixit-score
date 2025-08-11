@@ -1,13 +1,18 @@
 'use client';
 
-import { Player, PlayerId, Vote as VoteType } from '@/types/types';
+import { Player, PlayerId, Vote as VoteType, ScoreConfig } from '@/types/types';
 import { CardList } from './CardList';
+import { RoundScoreboard } from './RoundScoreboard';
 
 interface StorytellerCardStepProps {
   players: Player[];
   storytellerCardId: string;
   votes: VoteType[];
-  currentStep: 'storyteller' | 'voting' | 'storytellerCard';
+  currentStep:
+    | 'storyteller'
+    | 'voting'
+    | 'storytellerCard'
+    | 'playerCardReveal';
   onCardClick: (cardOwnerId: PlayerId) => void;
 }
 

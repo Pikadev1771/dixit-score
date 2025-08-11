@@ -13,6 +13,9 @@ import { StorytellerSelector } from './StorytellerSelector';
 import { StorytellerInfo } from './StorytellerInfo';
 import { VotingStep } from './VotingStep';
 import { StorytellerCardStep } from './StorytellerCardStep';
+import { PlayerCardRevealStep } from './PlayerCardRevealStep';
+import { RoundScoreboard } from './RoundScoreboard';
+import { useGameStore } from '@/lib/store';
 
 interface VoteRoundFormProps {
   players: Player[];
@@ -25,13 +28,17 @@ export const VoteRoundForm = ({
   currentRound,
   onSubmit,
 }: VoteRoundFormProps) => {
+  const { scoreConfig } = useGameStore();
   const [storytellerId, setStorytellerId] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<
-    'storyteller' | 'voting' | 'storytellerCard'
+    'storyteller' | 'voting' | 'storytellerCard' | 'playerCardReveal'
   >('storyteller');
   const [votes, setVotes] = useState<VoteType[]>([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
   const [storytellerCardId, setStorytellerCardId] = useState<string>('');
+  const [revealedCards, setRevealedCards] = useState<PlayerId[]>([]);
+  const [currentRevealerIndex, setCurrentRevealerIndex] = useState(0);
+  const [cardOwners, setCardOwners] = useState<Record<PlayerId, PlayerId>>({});
 
   // 스토리텔러를 제외한 플레이어들
   const nonStorytellerPlayers = players.filter(
@@ -63,13 +70,83 @@ export const VoteRoundForm = ({
 
   const handleStorytellerCardSelect = (cardOwnerId: PlayerId) => {
     setStorytellerCardId(cardOwnerId);
+    setCurrentStep('playerCardReveal');
   };
 
   const handleCardClick = (cardOwnerId: PlayerId) => {
+    console.log('handleCardClick', cardOwnerId);
     if (currentStep === 'voting') {
       handleCardVote(cardOwnerId);
     } else if (currentStep === 'storytellerCard') {
       handleStorytellerCardSelect(cardOwnerId);
+    } else if (currentStep === 'playerCardReveal') {
+      // 이미 공개된 카드나 스토리텔러 카드는 선택할 수 없음
+      if (
+        storytellerCardId === cardOwnerId ||
+        revealedCards.includes(cardOwnerId)
+      ) {
+        return;
+      }
+      handlePlayerCardReveal(cardOwnerId);
+    }
+  };
+
+  const handlePlayerCardReveal = (cardOwnerId: PlayerId) => {
+    console.log('handlePlayerCardReveal', {
+      cardOwnerId,
+      currentRevealerIndex,
+      currentRevealer: nonStorytellerPlayers[currentRevealerIndex],
+      nonStorytellerPlayers: nonStorytellerPlayers.map((p) => ({
+        id: p.id,
+        name: p.name,
+      })),
+    });
+
+    // 현재 공개할 플레이어가 선택한 카드를 해당 플레이어의 카드로 설정
+    const currentRevealer = nonStorytellerPlayers[currentRevealerIndex];
+
+    console.log('Setting card owner', {
+      cardOwnerId,
+      currentRevealerId: currentRevealer.id,
+      currentRevealerName: currentRevealer.name,
+    });
+
+    // 카드 소유자 정보 업데이트
+    setCardOwners((prev) => ({
+      ...prev,
+      [cardOwnerId]: currentRevealer.id,
+    }));
+
+    setRevealedCards((prev) => [...prev, cardOwnerId]);
+
+    // 마지막에서 2번째 플레이어인 경우, 마지막 플레이어도 자동으로 남은 카드 선택
+    if (currentRevealerIndex === nonStorytellerPlayers.length - 2) {
+      // 남은 카드 찾기 (스토리텔러 카드와 이미 공개된 카드 제외)
+      const remainingCard = players.find(
+        (player) =>
+          player.id !== storytellerCardId &&
+          !revealedCards.includes(player.id) &&
+          player.id !== cardOwnerId
+      );
+
+      if (remainingCard) {
+        const lastRevealer =
+          nonStorytellerPlayers[nonStorytellerPlayers.length - 1];
+
+        // 마지막 플레이어의 카드도 자동으로 설정
+        setCardOwners((prev) => ({
+          ...prev,
+          [remainingCard.id]: lastRevealer.id,
+        }));
+
+        setRevealedCards((prev) => [...prev, remainingCard.id]);
+        setCurrentRevealerIndex((prev) => prev + 1);
+      }
+    } else if (currentRevealerIndex < nonStorytellerPlayers.length - 1) {
+      setCurrentRevealerIndex((prev) => prev + 1);
+    } else {
+      // 모든 플레이어 카드 공개 완료
+      // TODO: 다음 단계로 진행
     }
   };
 
@@ -120,6 +197,36 @@ export const VoteRoundForm = ({
             votes={votes}
             currentStep={currentStep}
             onCardClick={handleCardClick}
+          />
+        )}
+
+        {/* 플레이어 카드 공개 STEP */}
+        {currentStep === 'playerCardReveal' && (
+          <PlayerCardRevealStep
+            players={players}
+            nonStorytellerPlayers={nonStorytellerPlayers}
+            currentRevealerIndex={currentRevealerIndex}
+            votes={votes}
+            revealedCards={revealedCards}
+            storytellerCardId={storytellerCardId}
+            currentStep={currentStep}
+            onCardClick={handleCardClick}
+            cardOwners={cardOwners}
+          />
+        )}
+
+        {/* 라운드 스코어보드 - 스토리텔러 카드 공개 스텝부터 표시 */}
+        {(currentStep === 'storytellerCard' ||
+          currentStep === 'playerCardReveal') && (
+          <RoundScoreboard
+            players={players}
+            votes={votes}
+            storytellerId={storytellerId}
+            storytellerCardId={storytellerCardId}
+            revealedCards={revealedCards}
+            cardOwners={cardOwners}
+            scoreConfig={scoreConfig}
+            isMini={true}
           />
         )}
       </div>

@@ -2,7 +2,6 @@
 
 import { Player, PlayerId, Vote as VoteType } from '@/types/types';
 import { CardList } from './CardList';
-import { PlayerList } from './PlayerList';
 
 interface VotingStepProps {
   players: Player[];
@@ -10,7 +9,11 @@ interface VotingStepProps {
   currentVoterIndex: number;
   votes: VoteType[];
   storytellerCardId: string;
-  currentStep: 'storyteller' | 'voting' | 'storytellerCard';
+  currentStep:
+    | 'storyteller'
+    | 'voting'
+    | 'storytellerCard'
+    | 'playerCardReveal';
   onCardClick: (cardOwnerId: PlayerId) => void;
 }
 
@@ -23,25 +26,18 @@ export const VotingStep = ({
   currentStep,
   onCardClick,
 }: VotingStepProps) => {
+  const currentVoter = nonStorytellerPlayers[currentVoterIndex];
+
   return (
     <>
       <div className="mb-4">
         <h3 className="text-md font-medium text-gray-800 mb-2">카드 투표</h3>
-
-        <p className="text-sm text-gray-600 mb-2">
-          <span className="font-bold">
-            {nonStorytellerPlayers[currentVoterIndex]?.name}
-          </span>{' '}
-          님이 투표할 차례입니다.
+        <p className="text-sm text-gray-600 mb-4">
+          <span className="font-bold">{currentVoter?.name}</span> 님이 투표할
+          차례입니다.
         </p>
       </div>
-      <PlayerList
-        nonStorytellerPlayers={nonStorytellerPlayers}
-        allPlayers={players}
-        currentStep={currentStep}
-        currentVoterIndex={currentVoterIndex}
-        votes={votes}
-      />
+
       <CardList
         players={players}
         storytellerCardId={storytellerCardId}
