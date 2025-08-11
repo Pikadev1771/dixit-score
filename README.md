@@ -112,7 +112,7 @@ export const calculateCorrectGuessScore = (
   if (playerId !== storytellerId && storytellerCardId) {
     const hasCorrectGuess = votes.some(
       (vote) =>
-        vote.voterId === playerId && vote.votedCardId === storytellerCardId
+        vote.voterId === playerId && vote.votedTargetId === storytellerCardId
     );
     return hasCorrectGuess ? scoreConfig.correctGuessPoints : 0;
   }

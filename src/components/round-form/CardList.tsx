@@ -82,7 +82,7 @@ export const CardList = ({
           {votes.length > 0 && (
             <div className="text-xs text-gray-500 mt-1 text-center">
               {votes
-                .filter((vote) => vote.votedCardId === player.id)
+                .filter((vote) => vote.votedTargetId === player.id)
                 .map((vote) => {
                   const voter = players.find((p) => p.id === vote.voterId);
                   return (

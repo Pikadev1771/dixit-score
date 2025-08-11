@@ -15,7 +15,7 @@ export interface ScoreConfig {
 
 export interface Vote {
   voterId: PlayerId;
-  votedCardId: PlayerId;
+  votedTargetId: PlayerId;
 }
 
 export interface RoundForm {
