@@ -13,9 +13,15 @@ export interface ScoreConfig {
   receivedVotePoints: number;
 }
 
+export interface Vote {
+  voterId: PlayerId;
+  votedCardOwnerId: PlayerId;
+}
+
 export interface RoundScoreForm {
   storytellerId: PlayerId;
   directScores: Record<PlayerId, number>;
+  votes?: Vote[];
 }
 
 export interface Round {
