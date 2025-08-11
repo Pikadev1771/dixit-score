@@ -26,6 +26,8 @@ export interface Round {
   timestamp: string;
 }
 
+export type Mode = 'VOTE' | 'SCORE';
+
 export interface GameState {
   players: Player[];
   rounds: Round[];
@@ -33,4 +35,5 @@ export interface GameState {
   isGameEnded: boolean;
   winnerIds: PlayerId[];
   victoryPoints: number;
+  mode: Mode;
 }

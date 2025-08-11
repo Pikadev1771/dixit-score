@@ -6,7 +6,7 @@ import { GameSetup } from '@/components/gameSetup/GameSetup';
 import { Scoreboard } from '@/components/Scoreboard';
 
 import { useGameStore } from '@/lib/store';
-import { RoundScoreForm, ScoreConfig } from '@/types/types';
+import { RoundScoreForm, ScoreConfig, Mode } from '@/types/types';
 import { RoundForm } from '@/components/RoundForm';
 import { RoundHistory } from '@/components/RoundHistory';
 
@@ -25,9 +25,11 @@ const Home = () => {
   const handleGameStart = (
     playerNames: string[],
     victoryPoints: number,
-    scoreConfig: ScoreConfig
+    scoreConfig: ScoreConfig,
+    mode: Mode
   ) => {
-    initializeGame(playerNames, victoryPoints, scoreConfig);
+    console.log(playerNames, victoryPoints, scoreConfig, mode);
+    initializeGame(playerNames, victoryPoints, scoreConfig, mode);
     setIsGameSetup(false);
   };
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Play } from 'lucide-react';
-import { ScoreConfig } from '@/types/types';
+import { ScoreConfig, Mode } from '@/types/types';
 import {
   INITIAL_PLAYER_COUNT,
   INITIAL_PLAYER_NAMES,
@@ -15,16 +15,19 @@ import {
 import { PlayerSetup } from './PlayerSetup';
 import { VictoryPointsSetup } from './VictoryPointsSetup';
 import { ScoreConfigSetup } from './ScoreConfigSetup';
+import { SelectMode } from './SelectMode';
 
 interface GameSetupProps {
   onGameStart: (
     playerNames: string[],
     victoryPoints: number,
-    scoreConfig: ScoreConfig
+    scoreConfig: ScoreConfig,
+    mode: Mode
   ) => void;
 }
 
 export const GameSetup = ({ onGameStart }: GameSetupProps) => {
+  const [mode, setMode] = useState<Mode>('SCORE');
   const [playerCount, setPlayerCount] = useState(INITIAL_PLAYER_COUNT);
   const [playerNames, setPlayerNames] = useState(INITIAL_PLAYER_NAMES);
   const [victoryPoints, setVictoryPoints] = useState(
@@ -57,9 +60,13 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
     setPlayerNames(newNames);
   };
 
+  const handleModeChange = (mode: Mode) => () => {
+    setMode(mode);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGameStart(playerNames, victoryPoints, scoreConfig);
+    onGameStart(playerNames, victoryPoints, scoreConfig, mode);
   };
 
   return (
@@ -69,6 +76,10 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <SelectMode mode={mode} onModeChange={handleModeChange} />
+
+        <div className="border-t border-gray-200 my-6" />
+
         <PlayerSetup
           playerCount={playerCount}
           playerNames={playerNames}
@@ -76,14 +87,14 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
           onNameChange={handleNameChange}
         />
 
-        <div className="border-t border-gray-300 my-4" />
+        <div className="border-t border-gray-300 my-6" />
 
         <VictoryPointsSetup
           victoryPoints={victoryPoints}
           onVictoryPointsChange={setVictoryPoints}
         />
 
-        <div className="border-t border-gray-300 my-4" />
+        <div className="border-t border-gray-300 my-6" />
 
         <ScoreConfigSetup
           scoreConfig={scoreConfig}

@@ -5,6 +5,7 @@ import {
   Round,
   RoundScoreForm,
   ScoreConfig,
+  Mode,
 } from '@/types/types';
 
 import {
@@ -17,7 +18,8 @@ interface GameStore extends GameState {
   initializeGame: (
     playerNames: string[],
     victoryPoints?: number,
-    scoreConfig?: ScoreConfig
+    scoreConfig?: ScoreConfig,
+    mode?: Mode
   ) => void;
   finishRound: (form: RoundScoreForm) => void;
   resetGame: () => void;
@@ -30,11 +32,13 @@ const useGameStore = create<GameStore>((set, get) => ({
   isGameEnded: false,
   winnerIds: [],
   victoryPoints: INITIAL_VICTORY_TOTAL_POINTS,
+  mode: 'SCORE' as Mode,
 
   initializeGame: (
     playerNames: string[],
     victoryPoints?: number,
-    scoreConfig?: ScoreConfig
+    scoreConfig?: ScoreConfig,
+    mode?: Mode
   ) => {
     const players: Player[] = playerNames.map((name, index) => ({
       id: `player-${index + 1}`,
@@ -49,6 +53,7 @@ const useGameStore = create<GameStore>((set, get) => ({
       winnerIds: [],
       victoryPoints: victoryPoints || INITIAL_VICTORY_TOTAL_POINTS,
       scoreConfig: scoreConfig || DEFAULT_SCORING_CONFIG,
+      mode: mode || 'SCORE',
     });
   },
 

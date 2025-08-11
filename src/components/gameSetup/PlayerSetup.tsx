@@ -18,7 +18,6 @@ export const PlayerSetup = ({
 }: PlayerSetupProps) => {
   return (
     <div className="space-y-4">
-      {/* 플레이어 수 조절 */}
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium text-gray-700">Players</label>
         <div className="flex items-center gap-3">
@@ -44,7 +43,6 @@ export const PlayerSetup = ({
         </div>
       </div>
 
-      {/* 플레이어 이름 입력 */}
       <div className="space-y-3">
         {playerNames.map((name, index) => (
           <div

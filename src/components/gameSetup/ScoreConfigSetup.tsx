@@ -21,23 +21,23 @@ export const ScoreConfigSetup = ({
       </div>
 
       <NumberInput
-        label={`Storyteller\n(All/None Guessed)`}
-        value={scoreConfig.storytellerAllOrNoneGuessedPoints}
-        onChange={(value) =>
-          onScoreConfigChange({
-            ...scoreConfig,
-            storytellerAllOrNoneGuessedPoints: value,
-          })
-        }
-      />
-
-      <NumberInput
         label={`Storyteller\n(Normal)`}
         value={scoreConfig.storytellerNormalPoints}
         onChange={(value) =>
           onScoreConfigChange({
             ...scoreConfig,
             storytellerNormalPoints: value,
+          })
+        }
+      />
+
+      <NumberInput
+        label={`Storyteller\n(All/None Guessed)`}
+        value={scoreConfig.storytellerAllOrNoneGuessedPoints}
+        onChange={(value) =>
+          onScoreConfigChange({
+            ...scoreConfig,
+            storytellerAllOrNoneGuessedPoints: value,
           })
         }
       />
