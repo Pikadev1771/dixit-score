@@ -1,5 +1,7 @@
+'use client';
+
+import { Vote, Calculator } from 'lucide-react';
 import { Mode } from '@/types/types';
-import { Calculator, Vote } from 'lucide-react';
 
 interface SelectModeProps {
   mode: Mode;

@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { GameSetup } from '@/components/gameSetup/GameSetup';
+import { GameSetup } from '@/components/game-setup';
 import { Scoreboard } from '@/components/Scoreboard';
-
 import { useGameStore } from '@/lib/store';
 import { RoundScoreForm, ScoreConfig, Mode } from '@/types/types';
-import { RoundForm } from '@/components/RoundForm';
 import { RoundHistory } from '@/components/RoundHistory';
+import { RoundForm } from '@/components/round-form';
 
 const Home = () => {
   const [isGameSetup, setIsGameSetup] = useState(true);
@@ -28,7 +27,6 @@ const Home = () => {
     scoreConfig: ScoreConfig,
     mode: Mode
   ) => {
-    console.log(playerNames, victoryPoints, scoreConfig, mode);
     initializeGame(playerNames, victoryPoints, scoreConfig, mode);
     setIsGameSetup(false);
   };

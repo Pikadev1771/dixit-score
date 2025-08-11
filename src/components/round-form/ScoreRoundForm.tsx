@@ -8,27 +8,26 @@ import {
   PlayerId,
 } from '@/types/types';
 import { getPlayerColor } from '@/constants/theme';
+import { getMaxScorePerRound } from '@/lib/dixit';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from '../ui/select';
 
-import { getMaxScorePerRound } from '@/lib/dixit';
-
-interface RoundFormProps {
+interface ScoreRoundFormProps {
   players: Player[];
   currentRound: number;
   onSubmit: (form: RoundScoreFormType) => void;
 }
 
-export const RoundForm = ({
+export const ScoreRoundForm = ({
   players,
   currentRound,
   onSubmit,
-}: RoundFormProps) => {
+}: ScoreRoundFormProps) => {
   const [storytellerId, setStorytellerId] = useState<string>('');
   const [directScores, setDirectScores] = useState<Record<PlayerId, number>>(
     {}
@@ -72,7 +71,7 @@ export const RoundForm = ({
   return (
     <div className="bg-white border-1 border-gray-600 p-6">
       <h2 className="font-light text-lg text-gray-800 mb-4 flex items-center gap-2">
-        <Dices size={20} strokeWidth={1.5} /> Round {currentRound}
+        <Dices size={20} strokeWidth={1.5} /> Round {currentRound} (Score Mode)
       </h2>
 
       <form onSubmit={handleRoundSubmit} className="space-y-4">
