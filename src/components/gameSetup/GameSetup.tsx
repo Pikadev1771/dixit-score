@@ -75,10 +75,8 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
         Game Setup
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <SelectMode mode={mode} onModeChange={handleModeChange} />
-
-        <div className="border-t border-gray-200 my-6" />
 
         <PlayerSetup
           playerCount={playerCount}
@@ -87,19 +85,19 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
           onNameChange={handleNameChange}
         />
 
-        <div className="border-t border-gray-300 my-6" />
-
         <VictoryPointsSetup
           victoryPoints={victoryPoints}
           onVictoryPointsChange={setVictoryPoints}
         />
 
-        <div className="border-t border-gray-300 my-6" />
-
-        <ScoreConfigSetup
-          scoreConfig={scoreConfig}
-          onScoreConfigChange={setScoreConfig}
-        />
+        {mode === 'VOTE' && (
+          <>
+            <ScoreConfigSetup
+              scoreConfig={scoreConfig}
+              onScoreConfigChange={setScoreConfig}
+            />
+          </>
+        )}
 
         <button
           type="submit"
