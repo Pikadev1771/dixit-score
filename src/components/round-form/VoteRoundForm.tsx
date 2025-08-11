@@ -104,27 +104,27 @@ export const VoteRoundForm = ({
 
     setRevealedCards((prev) => [...prev, targetId]);
 
-    // 마지막에서 2번째 플레이어인 경우, 마지막 플레이어도 자동으로 남은 카드 선택
+    // 현재 마지막에서 2번째 플레이어인 경우, 마지막 플레이어도 자동으로 남은 카드 선택
     if (currentRevealerIndex === nonStorytellerPlayers.length - 2) {
       // 남은 카드 찾기 (스토리텔러 카드와 이미 공개된 카드 제외)
-      const remainingCard = players.find(
+      const lastCard = players.find(
         (player) =>
           player.id !== storytellerCardId &&
           !revealedCards.includes(player.id) &&
           player.id !== targetId
       );
 
-      if (remainingCard) {
+      if (lastCard) {
         const lastRevealer =
           nonStorytellerPlayers[nonStorytellerPlayers.length - 1];
 
         // 마지막 플레이어의 카드도 자동으로 설정
         setCardOwners((prev) => ({
           ...prev,
-          [remainingCard.id]: lastRevealer.id,
+          [lastCard.id]: lastRevealer.id,
         }));
 
-        setRevealedCards((prev) => [...prev, remainingCard.id]);
+        setRevealedCards((prev) => [...prev, lastCard.id]);
         setCurrentRevealerIndex(nonStorytellerPlayers.length); // 마지막 플레이어까지 완료된 걸로 처리
       }
     } else if (currentRevealerIndex < nonStorytellerPlayers.length - 1) {
