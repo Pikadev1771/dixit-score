@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Dices } from 'lucide-react';
+import { Dices, Check } from 'lucide-react';
 import {
   Player,
   RoundScoreForm as RoundScoreFormType,
@@ -74,7 +74,6 @@ export const VoteRoundForm = ({
   };
 
   const handleCardClick = (cardOwnerId: PlayerId) => {
-    console.log('handleCardClick', cardOwnerId);
     if (currentStep === 'voting') {
       handleCardVote(cardOwnerId);
     } else if (currentStep === 'storytellerCard') {
@@ -140,15 +139,79 @@ export const VoteRoundForm = ({
         }));
 
         setRevealedCards((prev) => [...prev, remainingCard.id]);
-        setCurrentRevealerIndex((prev) => prev + 1);
+        setCurrentRevealerIndex(nonStorytellerPlayers.length); // 마지막 플레이어까지 완료된 걸로 처리
       }
     } else if (currentRevealerIndex < nonStorytellerPlayers.length - 1) {
       setCurrentRevealerIndex((prev) => prev + 1);
-    } else {
-      // 모든 플레이어 카드 공개 완료
-      // TODO: 다음 단계로 진행
     }
   };
+
+  const handleRoundComplete = () => {
+    // Vote 모드에서 계산된 점수를 Score 모드 형식으로 변환
+    const directScores: Record<PlayerId, number> = {};
+
+    players.forEach((player) => {
+      let score = 0;
+
+      // 스토리텔러인 경우
+      if (player.id === storytellerId && storytellerCardId) {
+        const correctGuessCount = votes.filter(
+          (vote) => vote.votedCardOwnerId === storytellerCardId
+        ).length;
+        const totalVoters = players.length - 1; // 스토리텔러 제외
+
+        if (correctGuessCount === 0 || correctGuessCount === totalVoters) {
+          score += scoreConfig.storytellerAllOrNoneGuessedPoints;
+        } else {
+          score += scoreConfig.storytellerNormalPoints;
+        }
+      }
+
+      // 정답을 맞춘 경우 (스토리텔러가 아닌 플레이어)
+      if (player.id !== storytellerId && storytellerCardId) {
+        const hasCorrectGuess = votes.some(
+          (vote) =>
+            vote.voterId === player.id &&
+            vote.votedCardOwnerId === storytellerCardId
+        );
+        if (hasCorrectGuess) {
+          score += scoreConfig.correctGuessPoints;
+        }
+      }
+
+      // 받은 투표 점수 (카드가 공개된 플레이어만)
+      const playerCardId = Object.keys(cardOwners).find(
+        (cardId) => cardOwners[cardId] === player.id
+      );
+      if (playerCardId && revealedCards.includes(playerCardId)) {
+        const receivedVotes = votes.filter(
+          (vote) => vote.votedCardOwnerId === playerCardId
+        ).length;
+        score += receivedVotes * scoreConfig.receivedVotePoints;
+      }
+
+      directScores[player.id] = score;
+    });
+
+    onSubmit({
+      storytellerId,
+      directScores,
+    });
+
+    // 상태 초기화
+    setStorytellerId('');
+    setCurrentStep('storyteller');
+    setVotes([]);
+    setCurrentVoterIndex(0);
+    setStorytellerCardId('');
+    setRevealedCards([]);
+    setCurrentRevealerIndex(0);
+    setCardOwners({});
+  };
+
+  // 모든 플레이어 카드 공개가 완료되었는지 확인
+  const isAllCardsRevealed =
+    currentRevealerIndex >= nonStorytellerPlayers.length;
 
   return (
     <div className="bg-white border-1 border-gray-600 p-6">
@@ -226,8 +289,19 @@ export const VoteRoundForm = ({
             revealedCards={revealedCards}
             cardOwners={cardOwners}
             scoreConfig={scoreConfig}
-            isMini={true}
           />
+        )}
+
+        {/* 모든 카드 공개 완료 시 */}
+        {currentStep === 'playerCardReveal' && isAllCardsRevealed && (
+          <button
+            type="button"
+            onClick={handleRoundComplete}
+            className="w-full py-2 px-4 font-medium transition-colors flex items-center justify-center gap-2 bg-blue-400 hover:bg-blue-700 text-white"
+          >
+            <Check size={16} strokeWidth={1.5} />
+            COMPLETE ROUND
+          </button>
         )}
       </div>
     </div>

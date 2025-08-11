@@ -1,8 +1,6 @@
 'use client';
 
-import { Player, PlayerId, Vote as VoteType, ScoreConfig } from '@/types/types';
-import { getPlayerColor } from '@/constants/theme';
-import { useGameStore } from '@/lib/store';
+import { Player, PlayerId, Vote as VoteType } from '@/types/types';
 
 interface CardListProps {
   players: Player[];
@@ -15,7 +13,6 @@ interface CardListProps {
     | 'playerCardReveal';
   onCardClick: (cardOwnerId: PlayerId) => void;
   revealedCards?: PlayerId[];
-  scoreConfig?: ScoreConfig;
   nonStorytellerPlayers?: Player[];
   currentRevealerIndex?: number;
   cardOwners?: Record<PlayerId, PlayerId>;
@@ -28,14 +25,10 @@ export const CardList = ({
   currentStep,
   onCardClick,
   revealedCards = [],
-  scoreConfig: propScoreConfig,
   nonStorytellerPlayers = [],
   currentRevealerIndex = 0,
   cardOwners = {},
 }: CardListProps) => {
-  const { scoreConfig } = useGameStore();
-  const finalScoreConfig = propScoreConfig || scoreConfig;
-
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
       {players.map((player, index) => (
@@ -92,7 +85,7 @@ export const CardList = ({
               )}
             Card {index + 1}
           </div>
-          {/* 투표 결과 표시 - 점수는 제거하고 투표자만 표시 */}
+          {/* 투표자 표시 */}
           {votes.length > 0 && (
             <div className="text-xs text-gray-500 mt-1 text-center">
               {votes
