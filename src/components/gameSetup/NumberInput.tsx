@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 interface NumberInputProps {
-  label: string;
+  label?: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -48,9 +48,11 @@ export const NumberInput = ({
 
   return (
     <div className={`flex items-center justify-between ${className}`}>
-      <label className="text-sm font-medium text-gray-700 whitespace-pre-line">
-        {label}
-      </label>
+      {label && (
+        <label className="text-sm text-gray-700 whitespace-pre-line">
+          {label}
+        </label>
+      )}
       <input
         type="number"
         inputMode="numeric"

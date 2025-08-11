@@ -12,12 +12,16 @@ export const VictoryPointsSetup = ({
   onVictoryPointsChange,
 }: VictoryPointsSetupProps) => {
   return (
-    <NumberInput
-      label="Victory Points"
-      value={victoryPoints}
-      onChange={onVictoryPointsChange}
-      min={3}
-      max={100}
-    />
+    <div className="flex items-center justify-between">
+      <label className="text-md font-medium text-gray-700">
+        Victory Points
+      </label>
+      <NumberInput
+        value={victoryPoints}
+        onChange={onVictoryPointsChange}
+        min={3}
+        max={100}
+      />
+    </div>
   );
 };

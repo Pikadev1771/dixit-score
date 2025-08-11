@@ -19,7 +19,7 @@ export const PlayerSetup = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-700">Players</label>
+        <label className="text-md font-medium text-gray-700">Players</label>
         <div className="flex items-center gap-3">
           <button
             type="button"

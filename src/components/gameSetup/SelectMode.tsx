@@ -9,7 +9,7 @@ interface SelectModeProps {
 export const SelectMode = ({ mode, onModeChange }: SelectModeProps) => {
   return (
     <div>
-      <label className="text-sm font-medium text-gray-700 mb-2 block">
+      <label className="text-md font-medium text-gray-700 mb-2 block">
         Mode
       </label>
       <div className="grid grid-cols-2 gap-2">
