@@ -29,8 +29,6 @@ export const CardList = ({
   currentRevealerIndex = 0,
   cardOwners = {},
 }: CardListProps) => {
-  console.log('players', players);
-  console.log('votes', votes);
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
       {players.map((player, index) => (

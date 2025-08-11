@@ -21,8 +21,6 @@ const Home = () => {
     resetGame,
   } = useGameStore();
 
-  console.log('rounds', rounds);
-
   const handleGameStart = (
     playerNames: string[],
     victoryPoints: number,

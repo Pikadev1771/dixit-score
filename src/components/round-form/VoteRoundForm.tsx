@@ -33,7 +33,7 @@ export const VoteRoundForm = ({
   const { scoreConfig } = useGameStore();
   const [storytellerId, setStorytellerId] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<VoteStep>('storyteller');
-  const [votes, setVotes] = useState<VoteType[]>([]); // 투표 정보 (임시 votedTargetId)
+  const [votes, setVotes] = useState<VoteType[]>([]);
 
   // 현재 투표하는 플레이어 인덱스
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
