@@ -7,10 +7,7 @@ import {
   INITIAL_PLAYER_COUNT,
   INITIAL_PLAYER_NAMES,
   INITIAL_VICTORY_TOTAL_POINTS,
-  INITIAL_STORYTELLER_ALL_OR_NONE_GUESSED_POINTS,
-  INITIAL_STORYTELLER_NORMAL_POINTS,
-  INITIAL_CORRECT_GUESS_POINTS,
-  INITIAL_RECEIVED_VOTE_POINTS,
+  DEFAULT_SCORING_CONFIG,
 } from '@/constants/constants';
 import { PlayerSetup } from './PlayerSetup';
 import { VictoryPointsSetup } from './VictoryPointsSetup';
@@ -33,13 +30,9 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
   const [victoryPoints, setVictoryPoints] = useState(
     INITIAL_VICTORY_TOTAL_POINTS
   );
-  const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
-    storytellerAllOrNoneGuessedPoints:
-      INITIAL_STORYTELLER_ALL_OR_NONE_GUESSED_POINTS,
-    storytellerNormalPoints: INITIAL_STORYTELLER_NORMAL_POINTS,
-    correctGuessPoints: INITIAL_CORRECT_GUESS_POINTS,
-    receivedVotePoints: INITIAL_RECEIVED_VOTE_POINTS,
-  });
+  const [scoreConfig, setScoreConfig] = useState<ScoreConfig>(
+    DEFAULT_SCORING_CONFIG
+  );
 
   const handleNameChange = (index: number, name: string) => {
     const newNames = [...playerNames];
@@ -61,6 +54,9 @@ export const GameSetup = ({ onGameStart }: GameSetupProps) => {
   };
 
   const handleModeChange = (mode: Mode) => () => {
+    if (mode === 'SCORE') {
+      setScoreConfig(DEFAULT_SCORING_CONFIG);
+    }
     setMode(mode);
   };
 
