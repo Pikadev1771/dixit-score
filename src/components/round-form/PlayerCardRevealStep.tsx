@@ -1,6 +1,6 @@
 'use client';
 
-import { Player, PlayerId, Vote as VoteType } from '@/types/types';
+import { Player, PlayerId, VoteStep, Vote as VoteType } from '@/types/types';
 import { CardList } from './CardList';
 
 interface PlayerCardRevealStepProps {
@@ -10,11 +10,7 @@ interface PlayerCardRevealStepProps {
   votes: VoteType[];
   revealedCards: PlayerId[];
   storytellerCardId: string;
-  currentStep:
-    | 'storyteller'
-    | 'voting'
-    | 'storytellerCard'
-    | 'playerCardReveal';
+  currentStep: VoteStep;
   onCardClick: (cardOwnerId: PlayerId) => void;
   cardOwners?: Record<PlayerId, PlayerId>;
 }

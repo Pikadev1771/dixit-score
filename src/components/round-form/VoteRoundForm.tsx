@@ -31,16 +31,18 @@ export const VoteRoundForm = ({
   onSubmit,
 }: VoteRoundFormProps) => {
   const { scoreConfig } = useGameStore();
+
+  const [currentStep, setCurrentStep] = useState<VoteStep>('STORYTELLER');
+
   const [storytellerId, setStorytellerId] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState<VoteStep>('storyteller');
-  const [votes, setVotes] = useState<VoteType[]>([]);
-
-  // 현재 투표하는 플레이어 인덱스
-  const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
-
   const [storytellerCardId, setStorytellerCardId] = useState<string>('');
-  const [revealedCards, setRevealedCards] = useState<PlayerId[]>([]);
+
+  const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
   const [currentRevealerIndex, setCurrentRevealerIndex] = useState(0);
+
+  // temp target 이용
+  const [votes, setVotes] = useState<VoteType[]>([]);
+  const [revealedCards, setRevealedCards] = useState<PlayerId[]>([]);
   const [cardOwners, setCardOwners] = useState<Record<PlayerId, PlayerId>>({});
 
   // 스토리텔러 제외 플레이어들
@@ -51,7 +53,7 @@ export const VoteRoundForm = ({
   // 1. 스토리텔러 선택
   const handleStorytellerSelect = (value: string) => {
     setStorytellerId(value);
-    setCurrentStep('voting');
+    setCurrentStep('VOTING');
   };
 
   // 2. 카드 투표
@@ -69,31 +71,18 @@ export const VoteRoundForm = ({
       setCurrentVoterIndex((prev) => prev + 1);
     } else {
       // 모든 플레이어 투표 완료
-      setCurrentStep('storytellerCard');
+      setCurrentStep('STORYTELLER_CARD');
     }
   };
 
+  // 3. 스토리텔러 카드 공개
   const handleStorytellerCardSelect = (targetId: PlayerId) => {
     setStorytellerCardId(targetId);
-    setCurrentStep('playerCardReveal');
+    setCurrentStep('PLAYER_CARD');
   };
 
-  const handleCardClick = (targetId: PlayerId) => {
-    if (currentStep === 'voting') {
-      handleCardVote(targetId);
-    } else if (currentStep === 'storytellerCard') {
-      handleStorytellerCardSelect(targetId);
-    } else if (currentStep === 'playerCardReveal') {
-      // 이미 공개된 카드나 스토리텔러 카드는 선택할 수 없음
-      if (storytellerCardId === targetId || revealedCards.includes(targetId)) {
-        return;
-      }
-      handlePlayerCardReveal(targetId);
-    }
-  };
-
+  // 4. 플레이어 카드 공개
   const handlePlayerCardReveal = (targetId: PlayerId) => {
-    // 현재 공개할 플레이어가 선택한 카드를 해당 플레이어의 카드로 설정
     const currentRevealer = nonStorytellerPlayers[currentRevealerIndex];
 
     // 카드 소유자 정보 업데이트
@@ -104,27 +93,26 @@ export const VoteRoundForm = ({
 
     setRevealedCards((prev) => [...prev, targetId]);
 
-    // 현재 마지막에서 2번째 플레이어인 경우, 마지막 플레이어도 자동으로 남은 카드 선택
+    // 마지막에서 2번째 플레이어 카드 공개 후, 마지막 플레이어도 자동으로 남은 카드 선택
     if (currentRevealerIndex === nonStorytellerPlayers.length - 2) {
-      // 남은 카드 찾기 (스토리텔러 카드와 이미 공개된 카드 제외)
-      const lastCard = players.find(
+      const lastTarget = players.find(
         (player) =>
           player.id !== storytellerCardId &&
           !revealedCards.includes(player.id) &&
           player.id !== targetId
       );
 
-      if (lastCard) {
+      if (lastTarget) {
         const lastRevealer =
           nonStorytellerPlayers[nonStorytellerPlayers.length - 1];
 
         // 마지막 플레이어의 카드도 자동으로 설정
         setCardOwners((prev) => ({
           ...prev,
-          [lastCard.id]: lastRevealer.id,
+          [lastTarget.id]: lastRevealer.id,
         }));
 
-        setRevealedCards((prev) => [...prev, lastCard.id]);
+        setRevealedCards((prev) => [...prev, lastTarget.id]);
         setCurrentRevealerIndex(nonStorytellerPlayers.length); // 마지막 플레이어까지 완료된 걸로 처리
       }
     } else if (currentRevealerIndex < nonStorytellerPlayers.length - 1) {
@@ -132,8 +120,24 @@ export const VoteRoundForm = ({
     }
   };
 
+  const handleCardClick = (targetId: PlayerId) => {
+    if (currentStep === 'VOTING') {
+      // (카드 투표)
+      handleCardVote(targetId);
+    } else if (currentStep === 'STORYTELLER_CARD') {
+      // (스토리텔러 카드 공개)
+      handleStorytellerCardSelect(targetId);
+    } else if (currentStep === 'PLAYER_CARD') {
+      // (플레이어 카드 공개)
+      // 이미 공개된 카드나 스토리텔러 카드는 선택할 수 없음
+      if (storytellerCardId === targetId || revealedCards.includes(targetId)) {
+        return;
+      }
+      handlePlayerCardReveal(targetId);
+    }
+  };
+
   const handleRoundComplete = () => {
-    // 공통 점수 계산 로직 사용
     const scores: Record<PlayerId, number> = {};
 
     players.forEach((player) => {
@@ -157,7 +161,7 @@ export const VoteRoundForm = ({
 
     // 상태 초기화
     setStorytellerId('');
-    setCurrentStep('storyteller');
+    setCurrentStep('STORYTELLER');
     setVotes([]);
     setCurrentVoterIndex(0);
     setStorytellerCardId('');
@@ -166,7 +170,6 @@ export const VoteRoundForm = ({
     setCardOwners({});
   };
 
-  // 모든 플레이어 카드 공개가 완료되었는지 확인
   const isAllCardsRevealed =
     currentRevealerIndex >= nonStorytellerPlayers.length;
 
@@ -178,7 +181,7 @@ export const VoteRoundForm = ({
 
       <div className="space-y-4">
         {/* 스토리텔러 선택 STEP */}
-        {currentStep === 'storyteller' && (
+        {currentStep === 'STORYTELLER' && (
           <StorytellerSelector
             players={players}
             storytellerId={storytellerId}
@@ -186,12 +189,12 @@ export const VoteRoundForm = ({
           />
         )}
 
-        {currentStep !== 'storyteller' && (
+        {currentStep !== 'STORYTELLER' && (
           <StorytellerInfo players={players} storytellerId={storytellerId} />
         )}
 
         {/* 카드 투표 STEP */}
-        {currentStep === 'voting' && (
+        {currentStep === 'VOTING' && (
           <VotingStep
             players={players}
             nonStorytellerPlayers={nonStorytellerPlayers}
@@ -204,7 +207,7 @@ export const VoteRoundForm = ({
         )}
 
         {/* 스토리텔러 카드 선택 STEP */}
-        {currentStep === 'storytellerCard' && (
+        {currentStep === 'STORYTELLER_CARD' && (
           <StorytellerCardStep
             players={players}
             storytellerCardId={storytellerCardId}
@@ -215,7 +218,7 @@ export const VoteRoundForm = ({
         )}
 
         {/* 플레이어 카드 공개 STEP */}
-        {currentStep === 'playerCardReveal' && (
+        {currentStep === 'PLAYER_CARD' && (
           <PlayerCardRevealStep
             players={players}
             nonStorytellerPlayers={nonStorytellerPlayers}
@@ -229,9 +232,9 @@ export const VoteRoundForm = ({
           />
         )}
 
-        {/* 라운드 스코어보드 - 스토리텔러 카드 공개 스텝부터 표시 */}
-        {(currentStep === 'storytellerCard' ||
-          currentStep === 'playerCardReveal') && (
+        {/* 라운드 스코어보드 */}
+        {(currentStep === 'STORYTELLER_CARD' ||
+          currentStep === 'PLAYER_CARD') && (
           <RoundScoreboard
             players={players}
             votes={votes}
@@ -243,8 +246,7 @@ export const VoteRoundForm = ({
           />
         )}
 
-        {/* 모든 카드 공개 완료 시 */}
-        {currentStep === 'playerCardReveal' && isAllCardsRevealed && (
+        {currentStep === 'PLAYER_CARD' && isAllCardsRevealed && (
           <button
             type="button"
             onClick={handleRoundComplete}

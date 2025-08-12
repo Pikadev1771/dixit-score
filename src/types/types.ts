@@ -46,7 +46,7 @@ export interface GameState {
 }
 
 export type VoteStep =
-  | 'storyteller'
-  | 'voting'
-  | 'storytellerCard'
-  | 'playerCardReveal';
+  | 'STORYTELLER'
+  | 'VOTING'
+  | 'STORYTELLER_CARD'
+  | 'PLAYER_CARD';
