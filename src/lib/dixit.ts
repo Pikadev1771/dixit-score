@@ -5,9 +5,22 @@ export const getWinnerIds = (
   players: { id: PlayerId; totalScore: number }[],
   victoryPoints: number
 ): PlayerId[] => {
-  const winners = players.filter(
+  const eligibleWinners = players.filter(
     (player) => player.totalScore >= victoryPoints
   );
+
+  if (eligibleWinners.length === 0) {
+    return [];
+  }
+
+  const maxScore = Math.max(
+    ...eligibleWinners.map((player) => player.totalScore)
+  );
+
+  const winners = eligibleWinners.filter(
+    (player) => player.totalScore === maxScore
+  );
+
   return winners.map((winner) => winner.id);
 };
 
