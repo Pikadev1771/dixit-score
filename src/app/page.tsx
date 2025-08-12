@@ -17,7 +17,7 @@ const Home = () => {
     isGameEnded,
     winnerIds,
     initializeGame,
-    finishRound,
+    completeRound,
     resetGame,
   } = useGameStore();
 
@@ -32,7 +32,7 @@ const Home = () => {
   };
 
   const handleRoundSubmit = (form: RoundFormType) => {
-    finishRound(form);
+    completeRound(form);
   };
 
   const handleResetGame = () => {

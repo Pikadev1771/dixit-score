@@ -197,8 +197,7 @@ export const VoteRoundForm = ({
         {currentStep === 'VOTING' && (
           <VotingStep
             players={players}
-            nonStorytellerPlayers={nonStorytellerPlayers}
-            currentVoterIndex={currentVoterIndex}
+            currentVoter={nonStorytellerPlayers[currentVoterIndex]}
             votes={votes}
             storytellerCardId={storytellerCardId}
             currentStep={currentStep}

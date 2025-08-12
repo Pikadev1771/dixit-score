@@ -5,25 +5,21 @@ import { CardList } from './CardList';
 
 interface VotingStepProps {
   players: Player[];
-  nonStorytellerPlayers: Player[];
-  currentVoterIndex: number;
+  currentVoter: Player;
   votes: VoteType[];
   storytellerCardId: string;
   currentStep: VoteStep;
-  onCardClick: (cardOwnerId: PlayerId) => void;
+  onCardClick: (targetId: PlayerId) => void;
 }
 
 export const VotingStep = ({
   players,
-  nonStorytellerPlayers,
-  currentVoterIndex,
+  currentVoter,
   votes,
   storytellerCardId,
   currentStep,
   onCardClick,
 }: VotingStepProps) => {
-  const currentVoter = nonStorytellerPlayers[currentVoterIndex];
-
   return (
     <>
       <div className="mb-4 text-gray-800">

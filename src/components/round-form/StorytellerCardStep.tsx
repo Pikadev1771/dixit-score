@@ -8,7 +8,7 @@ interface StorytellerCardStepProps {
   storytellerCardId: string;
   votes: VoteType[];
   currentStep: VoteStep;
-  onCardClick: (cardOwnerId: PlayerId) => void;
+  onCardClick: (targetId: PlayerId) => void;
 }
 
 export const StorytellerCardStep = ({
