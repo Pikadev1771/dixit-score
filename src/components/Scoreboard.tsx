@@ -26,17 +26,17 @@ export const Scoreboard = ({
     (a, b) => b.totalScore - a.totalScore
   );
 
-  const getWinnerNames = () => {
+  const getWinners = () => {
     if (winnerIds.length === 0) return '';
     if (winnerIds.length === 1) {
       const winner = players.find((p) => p.id === winnerIds[0]);
-      return `${winner?.name}님이\n승리했습니다!`;
+      return `${winner?.name}님이\n승리했습니다! 🎉`;
     }
     const winnerNames = winnerIds
       .map((id) => players.find((p) => p.id === id)?.name)
       .filter(Boolean)
       .join(', ');
-    return `${winnerNames}님이\n공동 승리했습니다!`;
+    return `${winnerNames}님이\n공동 승리했습니다! 🎉`;
   };
 
   const getPlayerRowStyle = (playerId: PlayerId) => {
@@ -76,7 +76,7 @@ export const Scoreboard = ({
       {isGameEnded && winnerIds.length > 0 && (
         <div className="mb-4 p-4 bg-green-100 border-1 border-green-400">
           <p className="text-green-800 font-medium text-center flex items-center justify-center gap-2 whitespace-pre-line">
-            {getWinnerNames()} 🎉
+            {getWinners()}
           </p>
         </div>
       )}

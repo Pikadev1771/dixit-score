@@ -1,16 +1,12 @@
 'use client';
 
-import { Player, PlayerId, Vote as VoteType } from '@/types/types';
+import { Player, PlayerId, VoteStep, Vote as VoteType } from '@/types/types';
 
 interface CardListProps {
   players: Player[];
   storytellerCardId: string;
   votes: VoteType[];
-  currentStep:
-    | 'storyteller'
-    | 'voting'
-    | 'storytellerCard'
-    | 'playerCardReveal';
+  currentStep: VoteStep;
   onCardClick: (cardOwnerId: PlayerId) => void;
   revealedCards?: PlayerId[];
   nonStorytellerPlayers?: Player[];
@@ -38,7 +34,7 @@ export const CardList = ({
             onCardClick(player.id);
           }}
           disabled={
-            currentStep === 'playerCardReveal' &&
+            currentStep === 'PLAYER_CARD' &&
             (storytellerCardId === player.id ||
               revealedCards.includes(player.id))
           }
@@ -46,7 +42,7 @@ export const CardList = ({
             storytellerCardId === player.id
               ? 'border-orange-400 bg-orange-50 text-orange-700'
               : revealedCards.includes(player.id) &&
-                  currentStep === 'playerCardReveal' &&
+                  currentStep === 'PLAYER_CARD' &&
                   currentRevealerIndex < nonStorytellerPlayers.length - 1
                 ? 'border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed'
                 : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
@@ -60,7 +56,7 @@ export const CardList = ({
                 </span>
               </div>
             )}
-            {currentStep === 'playerCardReveal' &&
+            {currentStep === 'PLAYER_CARD' &&
               revealedCards.includes(player.id) && (
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <span className="text-blue-600 text-xs font-medium">
