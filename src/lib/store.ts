@@ -21,7 +21,7 @@ interface GameStore extends GameState {
     scoreConfig?: ScoreConfig,
     mode?: Mode
   ) => void;
-  finishRound: (form: RoundForm) => void;
+  completeRound: (form: RoundForm) => void;
   resetGame: () => void;
 }
 
@@ -57,7 +57,7 @@ const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  finishRound: (form: RoundForm) => {
+  completeRound: (form: RoundForm) => {
     const { players } = get();
 
     // 플레이어 총점 업데이트

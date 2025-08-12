@@ -25,7 +25,7 @@ export const calculateStorytellerScore = (
   }
 };
 
-// 플레이어 정답 점수 계산
+// 플레이어/스토리텔러 정답 점수 계산
 export const calculateCorrectGuessScore = (
   playerId: string,
   votes: Vote[],
@@ -64,7 +64,7 @@ export const calculateReceivedVoteScore = (
   revealedCards: PlayerId[],
   scoreConfig: ScoreConfig
 ): number => {
-  // 플레이어의 카드 ID 찾기
+  // 플레이어의 카드 ID 찾기 ('player-*' 형식)
   const playerCardId = Object.keys(cardOwners).find(
     (cardId) => cardOwners[cardId] === playerId
   );

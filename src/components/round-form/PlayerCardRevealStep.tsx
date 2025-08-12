@@ -11,7 +11,7 @@ interface PlayerCardRevealStepProps {
   revealedCards: PlayerId[];
   storytellerCardId: string;
   currentStep: VoteStep;
-  onCardClick: (cardOwnerId: PlayerId) => void;
+  onCardClick: (targetId: PlayerId) => void;
   cardOwners?: Record<PlayerId, PlayerId>;
 }
 
